@@ -275,7 +275,6 @@ a:hover {
     padding: calc(64px + 6rem) 0 6rem;
     background-color: #000;
     background-image:
-        radial-gradient(circle at 100% 100%, #000 0%, #000 160px, transparent 400px),
         linear-gradient(to right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.3)),
         url('hero-bg.png');
     background-size: cover;
