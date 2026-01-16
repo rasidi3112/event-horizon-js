@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="hero-bg.png" alt="Black Hole Explorer" width="100%" style="border-radius: 8px;">
+  <img src="hero-background.png" alt="Black Hole Explorer" width="100%" style="border-radius: 8px;">
 
   <h1>Black Hole Explorer & Quantum Chaos</h1>
   

@@ -276,7 +276,7 @@ a:hover {
     background-color: #000;
     background-image:
         linear-gradient(to right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.3)),
-        url('hero-bg.png');
+        url('hero-background.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
