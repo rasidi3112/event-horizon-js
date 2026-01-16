@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Mathematics | Black Hole & Quantum Chaos</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∫</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .math-section {
+            padding: 3rem 0;
+        }
+
+        .math-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+        }
+
+        .math-block .MathJax {
+            font-size: 1rem !important;
+        }
+
+        .math-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .math-note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .derivation-step {
+            margin: 1rem 0;
+            padding-left: 1rem;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .tensor-eq {
+            color: var(--text-primary);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        .section-nav a {
+            padding: 0.4rem 0.75rem;
+            border-radius: 4px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .section-nav a:hover {
+            border-color: var(--primary);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="space-bg">
+        <div class="stars" id="stars"></div>
+    </div>
+
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+        <a href="index.html" class="back-link">← Back to Black Hole Explorer</a>
+
+        <h1 class="section-title" style="margin-bottom: 0.5rem;">Advanced Mathematics</h1>
+        <p class="section-desc" style="text-align: left; margin-bottom: 2rem;">
+            Rigorous mathematical formalism for Black Hole Physics and Quantum Chaos - research level.
+        </p>
+
+        <nav class="section-nav">
+            <a href="#kerr-metric">Kerr Metric</a>
+            <a href="#penrose">Penrose Process</a>
+            <a href="#qnm">Quasinormal Modes</a>
+            <a href="#otoc-derivation">OTOC Derivation</a>
+            <a href="#syk">SYK Correlators</a>
+            <a href="#scrambling">Scrambling Bound</a>
+            <a href="#page-curve">Page Curve</a>
+            <a href="#island">Island Formula</a>
+            <a href="#complexity">Complexity</a>
+        </nav>
+
+        <!-- SECTION 1: KERR METRIC -->
+        <section id="kerr-metric" class="math-section">
+            <h2 class="subsection-title" style="text-align:left;">I. Kerr Metric & Boyer-Lindquist Coordinates</h2>
+
+            <div class="math-block">
+                <div class="math-title">Full Kerr Metric in Boyer-Lindquist Coordinates</div>
+                \[
+                ds^2 = -\left(1 - \frac{2Mr}{\Sigma}\right)dt^2 - \frac{4Mar\sin^2\theta}{\Sigma}dtd\phi +
+                \frac{\Sigma}{\Delta}dr^2 + \Sigma d\theta^2 + \left(r^2 + a^2 +
+                \frac{2Ma^2r\sin^2\theta}{\Sigma}\right)\sin^2\theta \, d\phi^2
+                \]
+                <div class="math-note">
+                    Where: \(\Sigma = r^2 + a^2\cos^2\theta\), \(\Delta = r^2 - 2Mr + a^2\), \(a = J/M\) (spin
+                    parameter)
+                </div>
+            </div>
+
+            <div class="math-block">
+                <div class="math-title">Event Horizons (Inner & Outer)</div>
+                \[
+                r_{\pm} = M \pm \sqrt{M^2 - a^2}
+                \]
+                <div class="derivation-step">
+                    Horizons occur where \(\Delta = 0\): \(r^2 - 2Mr + a^2 = 0\)
+                </div>
+                <div class="math-note">
+                    Extremal limit: \(a = M\) → horizons merge at \(r = M\). Naked singularity if \(a > M\) (cosmic
+                    censorship conjecture).
+                </div>
+            </div>
+
+            <div class="math-block">
+                <div class="math-title">Ergosphere Boundary</div>
+                \[
+                r_{\text{ergo}}(\theta) = M + \sqrt{M^2 - a^2\cos^2\theta}
+                \]
+                <div class="math-note">
+                    Static limit surface where \(g_{tt} = 0\). Observer cannot remain stationary relative to infinity.
+                </div>
+            </div>
+
+            <div class="math-block">
+                <div class="math-title">ISCO for Kerr Black Hole</div>
+                \[
+                r_{\text{ISCO}} = M\left[3 + Z_2 \mp \sqrt{(3-Z_1)(3+Z_1+2Z_2)}\right]
+                \]
+                <div class="derivation-step">
+                    \(Z_1 = 1 + (1-a_*^2)^{1/3}\left[(1+a_*)^{1/3} + (1-a_*)^{1/3}\right]\)
+                </div>
+                <div class="derivation-step">
+                    \(Z_2 = \sqrt{3a_*^2 + Z_1^2}\), where \(a_* = a/M\)
+                </div>
+            </div>
+
+            <div class="math-block">
+                <div class="math-title">Surface Gravity (Kerr)</div>
+                \[
+                \kappa = \frac{r_+ - r_-}{2(r_+^2 + a^2)} = \frac{\sqrt{M^2 - a^2}}{2M(M + \sqrt{M^2 - a^2})}
+                \]
+            </div>
+        </section>
+
+        <!-- SECTION 2: PENROSE PROCESS -->
+        <section id="penrose" class="math-section">
+            <h2 class="subsection-title" style="text-align:left;">II. Penrose Process & Energy Extraction</h2>
+
+            <div class="math-block">
+                <div class="math-title">Penrose Process Efficiency</div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Energy can be extracted from the ergosphere. Particles with negative energy (relative to infinity)
+                    fall in, while particles with higher energy than the initial particle escape.
+                </p>
+                \[
+                E_{\text{out}} = E_{\text{in}} + |E_{\text{negative}}|
+                \]
+                <div class="derivation-step">
+                    Maximum efficiency:
+                    \[
+                    \eta_{\max} = \frac{E_{\text{extracted}}}{M_{\text{initial}}} = 1 - \frac{1}{\sqrt{2}} \approx 29\%
+                    \]
+                </div>
+            </div>
+
+            <div class="math-block">
+                <div class="math-title">Irreducible Mass</div>
+                \[
+                M_{\text{irr}}^2 = \frac{1}{2}\left(M^2 + \sqrt{M^4 - J^2}\right) = \frac{A}{16\pi}
+                \]
+                <div class="derivation-step">
+                    Christodoulou's mass formula:
+                    \[
+                    M^2 = M_{\text{irr}}^2 + \frac{J^2}{4M_{\text{irr}}^2} + \frac{Q^4}{4M_{\text{irr}}^2} +
+                    \frac{Q^2}{2}
+                    \]
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: QUASINORMAL MODES -->
+        <section id="qnm" class="math-section">
+            <h2 class="subsection-title" style="text-align:left;">III. Quasinormal Modes & Linear Perturbation</h2>
+
+            <div class="math-block">
+                <div class="math-title">∿ Teukolsky Master Equation</div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Master equation for perturbations on a Kerr background (spin-s perturbations):
+                </p>
+                \[
+                \left[\frac{(r^2+a^2)^2}{\Delta} - a^2\sin^2\theta\right]\frac{\partial^2\Psi}{\partial t^2} +
+                \frac{4Mar}{\Delta}\frac{\partial^2\Psi}{\partial t\partial\phi} + \left[\frac{a^2}{\Delta} -
+                \frac{1}{\sin^2\theta}\right]\frac{\partial^2\Psi}{\partial\phi^2}
+                \]
+                \[
+                - \Delta^{-s}\frac{\partial}{\partial r}\left(\Delta^{s+1}\frac{\partial\Psi}{\partial r}\right) -
+                \frac{1}{\sin\theta}\frac{\partial}{\partial\theta}\left(\sin\theta\frac{\partial\Psi}{\partial\theta}\right)
+                - 2s\left[\frac{a(r-M)}{\Delta} +
+                \frac{i\cos\theta}{\sin^2\theta}\right]\frac{\partial\Psi}{\partial\phi}
+                \]
+                \[
+                - 2s\left[\frac{M(r^2-a^2)}{\Delta} - r - ia\cos\theta\right]\frac{\partial\Psi}{\partial t} +
+                (s^2\cot^2\theta - s)\Psi = 4\pi\Sigma T
+                \]
+            </div>
+
+            <div class="math-block">
+                <div class="math-title">QNM Frequencies (WKB Approximation)</div>
+                \[
+                \omega_n = \Omega_c \ell - i\left(n + \frac{1}{2}\right)|\lambda_L|
+                \]
+                <div class="derivation-step">
+                    For highly damped modes (large n):
+                    \[
+                    \omega_n \approx \frac{\ln 3}{8\pi M} + i\frac{2\pi T_H}{\hbar}\left(n + \frac{1}{2}\right)
+                    \]
+                </div>
+                <div class="math-note">
+                    QNM poles in retarded Green's function → connection to quantum chaos via pole-skipping.
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: OTOC -->
+        <section id="otoc-derivation" class="math-section">
+            <h2 class="subsection-title" style="text-align:left;">IV. Out-of-Time-Order Correlator (OTOC)</h2>
+
+            <div class="math-block">
+                <div class="math-title">OTOC Definition</div>
+                \[
+                F(t) = \langle W^\dagger(t) V^\dagger(0) W(t) V(0) \rangle_\beta
+                \]
+                <div class="derivation-step">
+                    Regularized version (finite temperature):
+                    \[
+                    F(t) = \text{Tr}\left[\sqrt{\rho} W^\dagger(t) \sqrt{\rho} V^\dagger \sqrt{\rho} W(t) \sqrt{\rho}
+                    V\right]
+                    \]
+                    where \(\rho = e^{-\beta H}/Z\)
+                </div>
+            </div>
+
+            <div class="math-block">
+                <div class="math-title">Exponential Growth</div>
+                \[
+                F(t) \approx 1 - \frac{\epsilon}{N} e^{\lambda_L t} + \mathcal{O}(\epsilon^2)
+                \]
+                <div class="derivation-step">
+                    Commutator squared:
+                    \[
+                    C(t) = -\langle [W(t), V]^2 \rangle_\beta \sim \frac{\epsilon}{N} e^{\lambda_L t}
+                    \]
+                </div>
+                <div class="math-note">
+                    \(\lambda_L\) = Lyapunov exponent. Scrambling time: \(t_* \sim \frac{1}{\lambda_L}\ln N\)
+                </div>
+            </div>
+
+            <div class="math-block">
+                <div class="math-title">MSS Chaos Bound (Maldacena-Shenker-Stanford 2016)</div>
+                \[
+                \boxed{\lambda_L \leq \frac{2\pi k_B T}{\hbar}}
+                \]
+                <div class="derivation-step">
+                    <strong>Derivation outline:</strong><br>
+                    1. Analytic continuation to imaginary time: \(F(t) \to F(t + i\beta/4)\)<br>
+                    2. Bound from positivity of spectral function<br>
+                    3. Uses KMS condition for thermal correlators
+                </div>
+                <div class="math-note">
+                    Black holes SATURATE this bound! This makes them the fastest scramblers in nature.
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: SYK MODEL -->
+        <section id="syk" class="math-section">
+            <h2 class="subsection-title" style="text-align:left;">V. SYK Model - Exact Solvability</h2>
+
+            <div class="math-block">
+                <div class="math-title">SYK Hamiltonian</div>
+                \[
+                H = \sum_{1 \leq i < j < k < l \leq N} J_{ijkl} \, \psi_i \psi_j \psi_k \psi_l \] <div
+                    class="derivation-step">
+                    Majorana fermions: \(\{\psi_i, \psi_j\} = \delta_{ij}\)<br>
+                    Disorder average: \(\overline{J_{ijkl}^2} = \frac{3! J^2}{N^3}\)
+            </div>
+    </div>
+
+    <div class="math-block">
+        <div class="math-title">Schwinger-Dyson Equations</div>
+        \[
+        G(\tau_1 - \tau_2) = -\langle T \psi_i(\tau_1)\psi_i(\tau_2)\rangle
+        \]
+        \[
+        \Sigma(\tau) = J^2 G(\tau)^{q-1}
+        \]
+        \[
+        G(i\omega_n)^{-1} = -i\omega_n - \Sigma(i\omega_n)
+        \]
+        <div class="math-note">
+            In the IR conformal limit \((\beta J \gg 1)\):
+        </div>
+        <div class="derivation-step">
+            \[
+            G(\tau) \propto \frac{\text{sgn}(\tau)}{|\tau|^{2\Delta}}, \quad \Delta = \frac{1}{q}
+            \]
+        </div>
+    </div>
+
+    <div class="math-block">
+        <div class="math-title">Four-Point Function & Chaos</div>
+        \[
+        \frac{\mathcal{F}(t)}{\mathcal{F}(0)} = 1 - \frac{6}{\beta J} e^{\frac{2\pi}{\beta}t} + \ldots
+        \]
+        <div class="math-note">
+            Lyapunov exponent: \(\lambda_L = \frac{2\pi}{\beta} = 2\pi T\) - saturates the chaos bound!
+        </div>
+    </div>
+
+    <div class="math-block">
+        <div class="math-title">Schwarzian Action (Low Energy)</div>
+        \[
+        S[\tau(u)] = -C \int_0^\beta du \, \{f(u), u\}
+        \]
+        <div class="derivation-step">
+            Schwarzian derivative:
+            \[
+            \{f, u\} = \frac{f'''}{f'} - \frac{3}{2}\left(\frac{f''}{f'}\right)^2
+            \]
+        </div>
+        <div class="math-note">
+            This action governs the dynamics of nearly-AdS₂/nearly-CFT₁ and JT gravity.
+        </div>
+    </div>
+    </section>
+
+    <!-- SECTION 6: SCRAMBLING -->
+    <section id="scrambling" class="math-section">
+        <h2 class="subsection-title" style="text-align:left;">VI. Scrambling & Butterfly Effect</h2>
+
+        <div class="math-block">
+            <div class="math-title">Butterfly Velocity</div>
+            \[
+            v_B^2 = \frac{d}{2(d-1)} \cdot (2\pi T)^2 r_h^2
+            \]
+            <div class="derivation-step">
+                Spatial spreading: \(C(t, \vec{x}) \sim e^{\lambda_L(t - |\vec{x}|/v_B)}\)
+            </div>
+        </div>
+
+        <div class="math-block">
+            <div class="math-title">Scrambling Time</div>
+            \[
+            t_* = \frac{\beta}{2\pi} \ln S = \frac{\hbar}{2\pi k_B T} \ln S
+            \]
+            <div class="derivation-step">
+                For black holes: \(S = \frac{A}{4G\hbar}\), sehingga:
+                \[
+                t_* \sim r_s \ln\left(\frac{r_s^2}{l_P^2}\right) \sim M \ln M
+                \]
+            </div>
+            <div class="math-note">
+                Scrambling time grows only logarithmically with entropy - extremely fast!
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: PAGE CURVE -->
+    <section id="page-curve" class="math-section">
+        <h2 class="subsection-title" style="text-align:left;">VII. Page Curve & Unitarity</h2>
+
+        <div class="math-block">
+            <div class="math-title">Page Curve Evolution</div>
+            \[
+            S_{\text{rad}}(t) = \begin{cases}
+            S_{\text{thermal}}(t) & t < t_{\text{Page}} \\ S_{\text{BH}}(t) & t> t_{\text{Page}}
+                \end{cases}
+                \]
+                <div class="derivation-step">
+                    Page time: \(t_{\text{Page}} \sim \frac{t_{\text{evap}}}{2}\)
+                    <br>
+                    At Page time, \(S_{\text{rad}} = S_{\text{BH}}\)
+                </div>
+        </div>
+
+        <div class="math-block">
+            <div class="math-title">Page's Result for Random States</div>
+            \[
+            \langle S_A \rangle = \ln(d_A) - \frac{d_A}{2d_B} + \mathcal{O}(1/d_B^2)
+            \]
+            <div class="math-note">
+                Where \(d_A, d_B\) are the Hilbert space dimensions of subsystems A and B, with \(d_A \leq d_B\).
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: ISLAND FORMULA -->
+    <section id="island" class="math-section">
+        <h2 class="subsection-title" style="text-align:left;">VIII. Island Formula & QES</h2>
+
+        <div class="math-block">
+            <div class="math-title">Generalized Entropy with Islands</div>
+            \[
+            \boxed{S_{\text{gen}}(R) = \min_{\mathcal{I}} \text{ext}_{\mathcal{I}}
+            \left[\frac{\text{Area}(\partial\mathcal{I})}{4G_N} + S_{\text{matter}}(R \cup \mathcal{I})\right]}
+            \]
+            <div class="derivation-step">
+                <strong>Key insight:</strong> Island \(\mathcal{I}\) is a region inside the horizon that "contributes"
+                to the entropy of radiation \(R\).
+            </div>
+        </div>
+
+        <div class="math-block">
+            <div class="math-title">Quantum Extremal Surface (QES)</div>
+            \[
+            \frac{\delta}{\delta X^\mu}\left[\frac{A[\gamma]}{4G_N} + S_{\text{bulk}}[\Sigma_\gamma]\right] = 0
+            \]
+            <div class="math-note">
+                QES generalizes RT/HRT surfaces to include quantum corrections. Crucial for resolving information
+                paradox.
+            </div>
+        </div>
+
+        <div class="math-block">
+            <div class="math-title">Replica Trick for Islands</div>
+            \[
+            S = \lim_{n \to 1} \frac{1}{1-n} \log \text{Tr}(\rho_R^n)
+            \]
+            <div class="derivation-step">
+                Path integral with replica saddles:
+                \[
+                \text{Tr}(\rho_R^n) = \sum_{\text{topologies}} e^{-I[\text{topology}]}
+                \]
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: COMPLEXITY -->
+    <section id="complexity" class="math-section">
+        <h2 class="subsection-title" style="text-align:left;">IX. Quantum Complexity & Holography</h2>
+
+        <div class="math-block">
+            <div class="math-title">Complexity = Volume (CV)</div>
+            \[
+            \mathcal{C}_V = \frac{V(\Sigma)}{G_N \ell}
+            \]
+            <div class="math-note">
+                \(\Sigma\) = maximal codimension-1 surface anchored at boundary time slice, \(\ell\) = AdS scale
+            </div>
+        </div>
+
+        <div class="math-block">
+            <div class="math-title">Complexity = Action (CA)</div>
+            \[
+            \mathcal{C}_A = \frac{I_{\text{WDW}}}{\pi\hbar}
+            \]
+            <div class="derivation-step">
+                Wheeler-DeWitt patch action:
+                \[
+                I_{\text{WDW}} = \frac{1}{16\pi G_N}\int_{\mathcal{M}} d^{d+1}x\sqrt{-g}(R - 2\Lambda) + \text{boundary
+                terms}
+                \]
+            </div>
+        </div>
+
+        <div class="math-block">
+            <div class="math-title">Lloyd's Bound</div>
+            \[
+            \frac{d\mathcal{C}}{dt} \leq \frac{2M}{\pi\hbar}
+            \]
+            <div class="derivation-step">
+                For eternal AdS black hole at late times:
+                \[
+                \frac{d\mathcal{C}}{dt} = \frac{2M}{\pi\hbar} \quad \text{(saturated!)}
+                \]
+            </div>
+            <div class="math-note">
+                Black holes are not only the fastest scramblers but also the fastest computers!
+            </div>
+        </div>
+
+        <div class="math-block">
+            <div class="math-title">Second Law of Complexity</div>
+            \[
+            \frac{d\mathcal{C}}{dt} \geq 0 \quad \text{until} \quad t \sim e^S
+            \]
+            <div class="math-note">
+                Complexity grows linearly for exponentially long time \(\sim e^{S_{\text{BH}}}\), then saturates and
+                fluctuates (Poincaré recurrences).
+            </div>
+        </div>
+    </section>
+
+    <!-- TABLE OF CONSTANTS -->
+    <section class="math-section">
+        <h2 class="subsection-title" style="text-align:left;">Physical Constants & Units</h2>
+        <div class="math-block">
+            <div class="math-title">Natural Units</div>
+            <table style="width: 100%; color: var(--text-secondary); font-size: 0.9rem; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;"><strong>Planck length</strong></td>
+                    <td>\(\ell_P = \sqrt{\frac{\hbar G}{c^3}} \approx 1.616 \times 10^{-35}\) m</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;"><strong>Planck mass</strong></td>
+                    <td>\(m_P = \sqrt{\frac{\hbar c}{G}} \approx 2.176 \times 10^{-8}\) kg</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;"><strong>Planck time</strong></td>
+                    <td>\(t_P = \sqrt{\frac{\hbar G}{c^5}} \approx 5.391 \times 10^{-44}\) s</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;"><strong>Planck temperature</strong></td>
+                    <td>\(T_P = \sqrt{\frac{\hbar c^5}{G k_B^2}} \approx 1.417 \times 10^{32}\) K</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;"><strong>Schwarzschild radius (1 M☉)</strong></td>
+                    <td>\(r_s = \frac{2GM}{c^2} \approx 2.95\) km</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    </div>
+
+    <script>
+        // Stars
+        const stars = document.getElementById('stars');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            const size = Math.random() * 2 + 0.5;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+            star.style.setProperty('--delay', `${Math.random() * 3}s`);
+            stars.appendChild(star);
+        }
+    </script>
+</body>
+
+</html>

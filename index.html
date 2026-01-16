@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    content="Black Hole Explorer - Scientific exploration of black holes, quantum chaos, and theoretical physics with
+    NASA data">
+    <meta name="keywords" content="black hole, quantum chaos, Hawking radiation, event horizon, singularity, NASA">
+    <title>Black Hole Explorer | Quantum Chaos Research</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="space-bg">
+        <div class="stars" id="stars"></div>
+        <div class="black-hole-bg"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">
+                <div class="brand-icon"></div>
+                <div class="brand-text">
+                    <span class="brand-name">Black Hole Explorer</span>
+                    <span class="brand-tag">Quantum Chaos Research</span>
+                </div>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#observed" class="nav-link">Observed</a></li>
+                <li><a href="#fundamentals" class="nav-link">Fundamentals</a></li>
+                <li><a href="#quantum-chaos" class="nav-link">Quantum Chaos</a></li>
+                <li><a href="#thermodynamics" class="nav-link">Thermodynamics</a></li>
+                <li><a href="advanced-math.html" class="nav-link">Math</a></li>
+                <li><a href="simulations.html" class="nav-link">Sims</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="api-indicator" id="apiIndicator">
+                    <span class="indicator-dot"></span>
+                    <span class="indicator-text">NASA API Connected</span>
+                </div>
+                <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-badge">Theoretical Physics Research</span>
+                <h1 class="hero-title">
+                    Black Holes & <span class="gradient-text">Quantum Chaos</span>
+                </h1>
+                <p class="hero-desc">
+                    A scientific exploration of black hole physics through quantum chaos theory,
+                    covering Schwarzschild and Kerr geometries, information scrambling dynamics,
+                    the MSS bound, and holographic correspondences.
+                </p>
+
+                <div class="research-topics">
+                    <span class="topic-tag">Event Horizon</span>
+                    <span class="topic-tag">Hawking Radiation</span>
+                    <span class="topic-tag">Information Paradox</span>
+                    <span class="topic-tag">OTOC</span>
+                    <span class="topic-tag">Lyapunov Exponent</span>
+                    <span class="topic-tag">AdS/CFT</span>
+                </div>
+
+                <div class="hero-cta">
+                    <a href="#fundamentals" class="btn btn-primary">
+                        Fundamentals
+                    </a>
+                    <a href="advanced-math.html" class="btn btn-glass">
+                        Advanced Mathematics
+                    </a>
+                    <a href="simulations.html" class="btn btn-glass">
+                        Simulations
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="black-hole-animation">
+                <div class="accretion-disk"></div>
+                <div class="event-horizon"></div>
+                <div class="singularity"></div>
+                <div class="photon-sphere"></div>
+                <div class="gravitational-lensing"></div>
+            </div>
+    </section>
+
+    <!-- Observed Black Holes Section -->
+    <section id="observed" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Observational Data</span>
+                <h2 class="section-title">Observed Black Holes</h2>
+                <p class="section-desc">Real black holes from EHT, LIGO/Virgo, and multi-wavelength observations. Select
+                    one to see calculated properties.</p>
+            </div>
+
+            <div class="observed-layout">
+                <div class="bh-database-panel">
+                    <h3>Black Hole Catalog</h3>
+                    <div id="bhDatabase" class="bh-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="bh-properties-panel">
+                    <h3>Calculated Properties</h3>
+                    <div class="properties-grid">
+                        <div class="property-group">
+                            <h4>Geometry</h4>
+                            <div class="property-item">
+                                <span class="property-label">Object</span>
+                                <span id="displayMass" class="property-value">-</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Schwarzschild radius</span>
+                                <span id="displayRadius" class="property-value">-</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">ISCO (Kerr)</span>
+                                <span id="displayISCO" class="property-value">-</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Spin parameter</span>
+                                <span id="displaySpin" class="property-value">-</span>
+                            </div>
+                        </div>
+
+                        <div class="property-group">
+                            <h4>Thermodynamics</h4>
+                            <div class="property-item">
+                                <span class="property-label">Hawking temperature</span>
+                                <span id="displayTemperature" class="property-value">-</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Bekenstein-Hawking entropy</span>
+                                <span id="displayEntropy" class="property-value">-</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Evaporation time</span>
+                                <span id="displayEvapTime" class="property-value">-</span>
+                            </div>
+                        </div>
+
+                        <div class="property-group">
+                            <h4>Quantum Chaos</h4>
+                            <div class="property-item">
+                                <span class="property-label">Lyapunov bound (λ<sub>L</sub>)</span>
+                                <span id="displayLyapunov" class="property-value">-</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Scrambling time (t<sub>*</sub>)</span>
+                                <span id="displayScrambling" class="property-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="formula-reference">
+                        <h4>Key Formulas</h4>
+                        <div class="formula-list">
+                            <code>r<sub>s</sub> = 2GM/c²</code>
+                            <code>T<sub>H</sub> = ℏc³/(8πGMk<sub>B</sub>)</code>
+                            <code>S<sub>BH</sub> = k<sub>B</sub>A/(4l<sub>P</sub>²)</code>
+                            <code>λ<sub>L</sub> ≤ 2πk<sub>B</sub>T/ℏ</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fundamentals Section -->
+    <section id="fundamentals" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Black Hole Fundamentals</span>
+                <h2 class="section-title">Black Hole Anatomy</h2>
+                <p class="section-desc">Fundamental structure and properties of black holes based on Einstein's general
+                    relativity.</p>
+            </div>
+
+            <div class="anatomy-grid">
+                <div class="anatomy-card">
+                    <div class="anatomy-icon"></div>
+                    <h3>Singularity</h3>
+                    <p>A point of infinite density at the center of a black hole. All known laws of physics break down
+                        here.</p>
+                    <div class="formula">
+                        <code>ρ → ∞</code>
+                        <span>Singularity density</span>
+                    </div>
+                </div>
+
+                <div class="anatomy-card">
+                    <div class="anatomy-icon"></div>
+                    <h3>Event Horizon</h3>
+                    <p>The boundary from which nothing, including light, can escape. Radius determined by
+                        mass.</p>
+                    <div class="formula">
+                        <code>r<sub>s</sub> = 2GM/c²</code>
+                        <span>Schwarzschild radius</span>
+                    </div>
+                </div>
+
+                <div class="anatomy-card">
+                    <div class="anatomy-icon"></div>
+                    <h3>Photon Sphere</h3>
+                    <p>Unstable circular orbit for photons at r = 1.5r<sub>s</sub>. Light can temporarily
+                        orbit.</p>
+                    <div class="formula">
+                        <code>r<sub>ph</sub> = 3GM/c²</code>
+                        <span>Photon sphere radius</span>
+                    </div>
+                </div>
+
+                <div class="anatomy-card">
+                    <div class="anatomy-icon"></div>
+                    <h3>Accretion Disk</h3>
+                    <p>Matter spinning and falling into the black hole, emitting intense radiation due to frictional
+                        heating.
+                    </p>
+                    <div class="formula">
+                        <code>L = ηṀc²</code>
+                        <span>Accretion luminosity (η ≈ 0.1)</span>
+                    </div>
+                </div>
+
+                <div class="anatomy-card">
+                    <div class="anatomy-icon"></div>
+                    <h3>Ergosphere</h3>
+                    <p>Region outside the event horizon of a rotating (Kerr) black hole where spacetime is dragged by
+                        rotation.
+                    </p>
+                    <div class="formula">
+                        <code>r<sub>e</sub> = M + √(M² - a²cos²θ)</code>
+                        <span>Ergosphere outer boundary</span>
+                    </div>
+                </div>
+
+                <div class="anatomy-card">
+                    <div class="anatomy-icon"></div>
+                    <h3>ISCO</h3>
+                    <p>Innermost Stable Circular Orbit - the deepest stable circular orbit before matter spirals
+                        inward.</p>
+                    <div class="formula">
+                        <code>r<sub>ISCO</sub> = 6GM/c² (Schwarzschild)</code>
+                        <span>3r<sub>s</sub> for non-rotating</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Black Hole Types -->
+            <div class="bh-types">
+                <h3 class="subsection-title">Black Hole Classification</h3>
+                <div class="types-grid">
+                    <div class="type-card">
+                        <h4>Schwarzschild</h4>
+                        <p>Non-rotating, uncharged. The simplest solution to Einstein's equations.</p>
+                        <code class="metric">ds² = -(1-2M/r)dt² + (1-2M/r)⁻¹dr² + r²dΩ²</code>
+                    </div>
+                    <div class="type-card">
+                        <h4>Kerr</h4>
+                        <p>Rotating, uncharged. The most realistic model for astrophysical black holes.</p>
+                        <code class="metric">Has spin parameter a = J/Mc</code>
+                    </div>
+                    <div class="type-card">
+                        <h4>Reissner-Nordström</h4>
+                        <p>Non-rotating, charged. Has two horizons (inner & outer).</p>
+                        <code class="metric">r± = M ± √(M² - Q²)</code>
+                    </div>
+                    <div class="type-card">
+                        <h4>Kerr-Newman</h4>
+                        <p>Rotating and charged. The most general solution for electrovacuum black holes.</p>
+                        <code class="metric">Combination of parameters M, J, Q</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quantum Chaos Section -->
+    <section id="quantum-chaos" class="section quantum-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"> Quantum Chaos in Black Holes</span>
+                <h2 class="section-title">Chaos & Scrambling</h2>
+                <p class="section-desc">Black holes as maximally chaotic systems - quantum information
+                    scrambling and connection with holography.</p>
+            </div>
+
+            <!-- Key Concepts -->
+            <div class="chaos-concepts">
+                <div class="concept-card featured">
+                    <div class="concept-header">
+                        <span class="concept-icon">λ</span>
+                        <h3>Lyapunov Exponent</h3>
+                    </div>
+                    <p>In classical chaotic systems, distance between trajectories grows exponentially: δx(t) ~
+                        e<sup>λt</sup>.
+                        Black holes have a maximal Lyapunov exponent bounded by quantum mechanics.</p>
+                    <div class="formula-box">
+                        <div class="main-formula">
+                            <code>λ<sub>L</sub> ≤ 2πk<sub>B</sub>T/ℏ</code>
+                        </div>
+                        <p>Maldacena-Shenker-Stanford bound (2016). Black holes saturate this bound in holographic
+                            theories.</p>
+                    </div>
+                    <div class="bh-value">
+                        <span>For Black Hole:</span>
+                        <code>λ<sub>BH</sub> = 2πT<sub>H</sub> = κ</code>
+                        <span class="note">(surface gravity)</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-icon">C</span>
+                        <h3>OTOC</h3>
+                    </div>
+                    <p>Out-of-Time-Order Correlator - the main diagnostic for quantum chaos.</p>
+                    <div class="formula-box">
+                        <code>C(t) = ⟨[W(t), V]†[W(t), V]⟩</code>
+                    </div>
+                    <p class="small">Measures how fast perturbations spread in a quantum system.</p>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-icon">t*</span>
+                        <h3>Scrambling Time</h3>
+                    </div>
+                    <p>Time required for information to "scramble" evenly throughout the system.</p>
+                    <div class="formula-box">
+                        <code>t* ~ (ℏ/2πT) log S</code>
+                    </div>
+                    <p class="small">S = Bekenstein-Hawking entropy. For BH: t* ~ r<sub>s</sub> log(S)</p>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-icon">∿</span>
+                        <h3>Quasinormal Modes</h3>
+                    </div>
+                    <p>Black hole oscillation modes that decay exponentially - fingerprint of chaos.</p>
+                    <div class="formula-box">
+                        <code>ω = ω<sub>R</sub> - iω<sub>I</sub></code>
+                    </div>
+                    <p class="small">Poles in Green's function, related to Lyapunov exponent.</p>
+                </div>
+            </div>
+
+            <!-- Holographic Connection -->
+            <div class="holography-section">
+                <h3 class="subsection-title"> Holographic Duality & SYK Model</h3>
+                <div class="holo-grid">
+                    <div class="holo-card">
+                        <h4>AdS/CFT Correspondence</h4>
+                        <p>Duality between gravity in Anti-de Sitter (AdS) space and Conformal Field Theory (CFT) on
+                            its boundary. Black hole in bulk ↔ thermal state on boundary.</p>
+                        <div class="duality-visual">
+                            <span>AdS₍ᵈ₊₁₎ Gravity</span>
+                            <span class="arrow">⟷</span>
+                            <span>CFT₍ᵈ₎</span>
+                        </div>
+                    </div>
+                    <div class="holo-card">
+                        <h4>SYK Model</h4>
+                        <p>Sachdev-Ye-Kitaev model - system of N fermions with random interactions. Maximally chaotic
+                            and
+                            has a gravitational dual in nearly-AdS₂.</p>
+                        <div class="formula-box">
+                            <code>H = Σ<sub>ijkl</sub> J<sub>ijkl</sub> ψ<sub>i</sub>ψ<sub>j</sub>ψ<sub>k</sub>ψ<sub>l</sub></code>
+                        </div>
+                    </div>
+                    <div class="holo-card">
+                        <h4>Butterfly Effect</h4>
+                        <p>In holography, small perturbations at the boundary "fall" into the black hole and spread
+                            chaotically.</p>
+                        <div class="formula-box">
+                            <code>v<sub>B</sub> = √(d/2(d-1)) × 2πT</code>
+                        </div>
+                        <p class="small">v<sub>B</sub> = butterfly velocity</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Research Applications -->
+            <div class="research-apps">
+                <h3 class="subsection-title"> Research Applications</h3>
+                <div class="apps-list">
+                    <div class="app-item">
+                        <span class="app-num">01</span>
+                        <div class="app-content">
+                            <h4>Information Scrambling Dynamics</h4>
+                            <p>Study of how quantum information spreads within the horizon - key to understanding
+                                the information paradox.</p>
+                        </div>
+                    </div>
+                    <div class="app-item">
+                        <span class="app-num">02</span>
+                        <div class="app-content">
+                            <h4>Quantum Circuit Complexity</h4>
+                            <p>Connection between volume of the region behind the horizon and computational complexity
+                                of the
+                                dual quantum state.</p>
+                        </div>
+                    </div>
+                    <div class="app-item">
+                        <span class="app-num">03</span>
+                        <div class="app-content">
+                            <h4>Eigenstate Thermalization</h4>
+                            <p>How individual black hole eigenstates encode thermal physics - ETH in
+                                gravitational systems.</p>
+                        </div>
+                    </div>
+                    <div class="app-item">
+                        <span class="app-num">04</span>
+                        <div class="app-content">
+                            <h4>Random Matrix Theory</h4>
+                            <p>Level spacing statistics of quasinormal modes follow random matrix distributions
+                                (GUE/GOE).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thermodynamics Section -->
+    <section id="thermodynamics" class="section thermo-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Black Hole Thermodynamics</span>
+                <h2 class="section-title">Laws of Black Hole Mechanics</h2>
+                <p class="section-desc">Fundamental relationship between gravity, thermodynamics, and quantum mechanics.
+                </p>
+            </div>
+
+            <!-- Four Laws -->
+            <div class="laws-grid">
+                <div class="law-card">
+                    <div class="law-number">0</div>
+                    <h3>Zeroth Law</h3>
+                    <p>Surface gravity κ is constant on the event horizon of a stationary black hole.</p>
+                    <div class="analogy">
+                        <span class="thermo">T constant at equilibrium</span>
+                        <span class="arrow">↔</span>
+                        <span class="bh">κ constant on horizon</span>
+                    </div>
+                </div>
+
+                <div class="law-card">
+                    <div class="law-number">1</div>
+                    <h3>First Law</h3>
+                    <p>Mass change is related to area change, angular momentum, and charge.</p>
+                    <div class="formula-box">
+                        <code>dM = (κ/8π)dA + ΩdJ + ΦdQ</code>
+                    </div>
+                    <div class="analogy">
+                        <span class="thermo">dE = TdS + work</span>
+                        <span class="arrow">↔</span>
+                        <span class="bh">dM = (κ/8π)dA + ...</span>
+                    </div>
+                </div>
+
+                <div class="law-card">
+                    <div class="law-number">2</div>
+                    <h3>Second Law</h3>
+                    <p>Event horizon area never decreases in any classical process.</p>
+                    <div class="formula-box">
+                        <code>δA ≥ 0</code>
+                    </div>
+                    <div class="analogy">
+                        <span class="thermo">Entropy S never decreases</span>
+                        <span class="arrow">↔</span>
+                        <span class="bh">Area A never decreases</span>
+                    </div>
+                </div>
+
+                <div class="law-card">
+                    <div class="law-number">3</div>
+                    <h3>Third Law</h3>
+                    <p>It is impossible to reduce surface gravity κ to zero through any finite physical process.</p>
+                    <div class="analogy">
+                        <span class="thermo">T = 0 is unattainable</span>
+                        <span class="arrow">↔</span>
+                        <span class="bh">κ = 0 (extremal) is unattainable</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hawking Radiation -->
+            <div class="hawking-section">
+                <h3 class="subsection-title"> Hawking Radiation</h3>
+                <div class="hawking-content">
+                    <div class="hawking-info">
+                        <p>Hawking's discovery (1974) that black holes radiate thermally demonstrated that the
+                            thermodynamic analogy is remarkably precise - black holes truly have temperature and
+                            entropy.</p>
+
+                        <div class="key-formulas">
+                            <div class="formula-item">
+                                <h4>Hawking Temperature</h4>
+                                <code>T<sub>H</sub> = ℏκ/2πk<sub>B</sub>c = ℏc³/8πGMk<sub>B</sub></code>
+                                <p>For M = M<sub>☉</sub>: T ≈ 60 nanoKelvin</p>
+                            </div>
+                            <div class="formula-item">
+                                <h4>Bekenstein-Hawking Entropy</h4>
+                                <code>S<sub>BH</sub> = k<sub>B</sub>A/4l<sub>P</sub>² = k<sub>B</sub>c³A/4Gℏ</code>
+                                <p>Entropy proportional to AREA, not volume!</p>
+                            </div>
+                            <div class="formula-item">
+                                <h4>Evaporation Time</h4>
+                                <code>t<sub>evap</sub> ≈ 5120πG²M³/ℏc⁴</code>
+                                <p>For M = M<sub>☉</sub>: t ≈ 10⁶⁷ years</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hawking-visual">
+                        <div class="pair-creation">
+                            <div class="horizon-line"></div>
+                            <div class="particle positive">+</div>
+                            <div class="particle negative">−</div>
+                            <div class="radiation-arrow"></div>
+                        </div>
+                        <p class="visual-caption">Virtual pair creation near horizon</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Information Paradox -->
+            <div class="paradox-section">
+                <h3 class="subsection-title"> Information Paradox</h3>
+                <div class="paradox-content">
+                    <p>If a black hole fully evaporates via Hawking radiation (which is thermal/random), where does the
+                        information about what fell in go? This conflicts with quantum mechanical unitarity!</p>
+                    <div class="solutions-grid">
+                        <div class="solution-card">
+                            <h4>Page Curve</h4>
+                            <p>Radiation entropy initially rises, then falls after "Page time" - information exits
+                                gradually.</p>
+                        </div>
+                        <div class="solution-card">
+                            <h4>Island Formula</h4>
+                            <p>Generalized entropy formula with "quantum extremal surfaces" reproduces the Page curve.
+                            </p>
+                        </div>
+                        <div class="solution-card">
+                            <h4>ER = EPR</h4>
+                            <p>Entanglement (EPR) is equivalent to wormholes (Einstein-Rosen bridge) - Maldacena &
+                                Susskind.</p>
+                        </div>
+                        <div class="solution-card">
+                            <h4>Firewall?</h4>
+                            <p>AMPS paradox: is there a "firewall" at the horizon that destroys infalling observers?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Observations Section -->
+    <section id="observations" class="section obs-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"> Observational Evidence</span>
+                <h2 class="section-title">Black Holes in Nature</h2>
+                <p class="section-desc">Observational evidence for the existence of black holes from various
+                    astronomical methods.</p>
+            </div>
+
+            <div class="observations-grid">
+                <div class="obs-card large">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Black_hole_-_Messier_87_crop_max_res.jpg/1200px-Black_hole_-_Messier_87_crop_max_res.jpg"
+                        alt="M87 Black Hole" loading="lazy">
+                    <div class="obs-info">
+                        <span class="obs-badge">EHT 2019</span>
+                        <h3>M87* - First Direct Image</h3>
+                        <p>First direct image of a supermassive black hole at the center of Messier 87 galaxy. Mass ~6.5
+                            billion M<sub>☉</sub>, distance 55 million light years.</p>
+                        <div class="obs-stats">
+                            <div class="obs-stat">
+                                <strong>6.5 × 10⁹ M<sub>☉</sub></strong>
+                                <span>Mass</span>
+                            </div>
+                            <div class="obs-stat">
+                                <strong>55 Mly</strong>
+                                <span>Distance</span>
+                            </div>
+                            <div class="obs-stat">
+                                <strong>~40 μas</strong>
+                                <span>Angular Size</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="obs-card">
+                    <div class="obs-icon"></div>
+                    <h3>Sagittarius A*</h3>
+                    <p>Supermassive black hole at the center of the Milky Way. Orbits of S-stars provide undeniable
+                        evidence.</p>
+                    <div class="obs-data">
+                        <span><strong>4 × 10⁶ M<sub>☉</sub></strong> mass</span>
+                        <span><strong>27,000 ly</strong> distance</span>
+                    </div>
+                </div>
+
+                <div class="obs-card">
+                    <div class="obs-icon"></div>
+                    <h3>Gravitational Waves</h3>
+                    <p>LIGO/Virgo detects binary black hole mergers. GW150914: ~36 + 29 M<sub>☉</sub> → 62
+                        M<sub>☉</sub></p>
+                    <div class="obs-data">
+                        <span><strong>90+</strong> detections</span>
+                        <span><strong>~3 M<sub>☉</sub>c²</strong> radiated</span>
+                    </div>
+                </div>
+
+                <div class="obs-card">
+                    <div class="obs-icon"></div>
+                    <h3>X-ray Binaries</h3>
+                    <p>Binary star systems with stellar-mass black holes. Matter accretion emits intense X-rays.</p>
+                    <div class="obs-data">
+                        <span><strong>Cygnus X-1</strong></span>
+                        <span><strong>~21 M<sub>☉</sub></strong></span>
+                    </div>
+                </div>
+
+                <div class="obs-card">
+                    <div class="obs-icon"></div>
+                    <h3>Quasars & AGN</h3>
+                    <p>Active galactic nuclei powered by supermassive black holes - the most luminous sources in the
+                        universe.</p>
+                    <div class="obs-data">
+                        <span>L ~ 10<sup>47</sup> erg/s</span>
+                        <span>z > 7 furthest</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section gallery-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"> NASA Black Hole Gallery</span>
+                <h2 class="section-title">Visualizations & Simulations</h2>
+                <p class="section-desc">Collection of black hole images and visualizations from NASA and global
+                    observatories.</p>
+            </div>
+
+            <div class="gallery-search">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    <input type="text" id="gallerySearch"
+                        placeholder="black hole, event horizon, gravitational lensing...">
+                    <button class="search-btn" id="searchBtn">Search</button>
+                </div>
+                <div class="search-tags">
+                    <button class="tag active" data-query="black hole">Black Hole</button>
+                    <button class="tag" data-query="event horizon telescope">EHT</button>
+                    <button class="tag" data-query="gravitational waves">Grav Waves</button>
+                    <button class="tag" data-query="accretion disk">Accretion Disk</button>
+                    <button class="tag" data-query="quasar">Quasar</button>
+                    <button class="tag" data-query="interstellar movie gargantua">Interstellar</button>
+                </div>
+            </div>
+
+            <div class="gallery-loader" id="galleryLoader">
+                <div class="loader-spinner"></div>
+                <p>Loading NASA images...</p>
+            </div>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+    </section>
+
+    <!-- References Section -->
+    <section id="references" class="section references-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"> Key References</span>
+                <h2 class="section-title">Literature & Resources</h2>
+            </div>
+
+            <div class="refs-grid">
+                <div class="ref-card">
+                    <span class="ref-type">Paper</span>
+                    <h4>Maldacena, Shenker, Stanford (2016)</h4>
+                    <p>"A bound on chaos" - arXiv:1503.01409</p>
+                </div>
+                <div class="ref-card">
+                    <span class="ref-type">Paper</span>
+                    <h4>Sachdev & Ye (1993)</h4>
+                    <p>SYK model foundations - Phys. Rev. Lett. 70, 3339</p>
+                </div>
+                <div class="ref-card">
+                    <span class="ref-type">Paper</span>
+                    <h4>Hawking (1974)</h4>
+                    <p>"Black hole explosions?" - Nature 248, 30-31</p>
+                </div>
+                <div class="ref-card">
+                    <span class="ref-type">Paper</span>
+                    <h4>Bekenstein (1973)</h4>
+                    <p>"Black holes and entropy" - Phys. Rev. D 7, 2333</p>
+                </div>
+                <div class="ref-card">
+                    <span class="ref-type">Review</span>
+                    <h4>Harlow (2016)</h4>
+                    <p>"Jerusalem Lectures on Black Holes and Quantum Information"</p>
+                </div>
+                <div class="ref-card">
+                    <span class="ref-type">Book</span>
+                    <h4>Susskind & Lindesay</h4>
+                    <p>"An Introduction to Black Holes, Information and the String Theory Revolution"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="imageModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <button class="modal-close" id="modalClose">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="modal-content">
+                <img src="" alt="" id="modalImage" class="modal-image">
+                <div class="modal-info">
+                    <h3 id="modalTitle"></h3>
+                    <p id="modalDesc"></p>
+                    <div class="modal-meta">
+                        <span id="modalDate"></span>
+                        <a href="#" id="modalDownload" target="_blank" class="download-btn">Download HD</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span></span>
+                        <span>Black Hole Explorer</span>
+                    </div>
+                    <p>Research platform for exploring black hole physics and quantum chaos. Observational data from
+                        NASA
+                        APIs.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <a href="#fundamentals">Fundamentals</a>
+                    <a href="#quantum-chaos">Quantum Chaos</a>
+                    <a href="#thermodynamics">Thermodynamics</a>
+                    <a href="#observations">Observations</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <a href="https://arxiv.org/list/hep-th/recent" target="_blank">arXiv hep-th</a>
+                    <a href="https://arxiv.org/list/gr-qc/recent" target="_blank">arXiv gr-qc</a>
+                    <a href="https://api.nasa.gov" target="_blank">NASA APIs</a>
+                    <a href="https://eventhorizontelescope.org" target="_blank">EHT</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Black Hole Explorer - Quantum Chaos Research Platform</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

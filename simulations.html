@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulations | Black Hole & Quantum Chaos</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>S</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .sim-container {
+            padding: 2rem 0 4rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .sim-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .sim-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.25rem;
+            overflow: hidden;
+        }
+
+        .sim-card h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .sim-card .description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .sim-canvas-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .sim-canvas-container canvas {
+            width: 100% !important;
+            height: 220px !important;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary);
+        }
+
+        .control-group .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .output-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+        }
+
+        .output-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .output-row:last-child {
+            border-bottom: none;
+        }
+
+        .output-row .label {
+            color: var(--text-secondary);
+        }
+
+        .output-row .val {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        .btn-sim {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .btn-sim:hover {
+            background: var(--primary-dark);
+        }
+
+        .formula-display {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .penrose-svg {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="space-bg">
+        <div class="stars" id="stars"></div>
+    </div>
+
+    <div class="container sim-container">
+        <a href="index.html" class="back-link">← Back to Black Hole Explorer</a>
+
+        <h1 class="section-title" style="margin-bottom: 0.5rem;">Simulations & Visualizations</h1>
+        <p class="section-desc" style="text-align: left; margin-bottom: 1rem;">
+            Interactive simulations for Black Hole and Quantum Chaos phenomena.
+        </p>
+
+        <div class="sim-grid">
+            <!-- 1. OTOC DECAY -->
+            <div class="sim-card">
+                <h3>OTOC Decay & Scrambling</h3>
+                <p class="description">
+                    Visualization of Out-of-Time-Order Correlator F(t) showing exponential chaos growth
+                    before scrambling time, then saturation.
+                </p>
+                <div class="formula-display">F(t) ≈ 1 - (ε/N) e<sup>λ<sub>L</sub>t</sup></div>
+                <div class="sim-canvas-container">
+                    <canvas id="otocCanvas"></canvas>
+                </div>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Temperature T (units of T<sub>P</sub>)</label>
+                        <input type="range" id="otocTemp" min="0.1" max="2" step="0.1" value="1">
+                        <span class="value" id="otocTempVal">1.0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>System Size N</label>
+                        <input type="range" id="otocN" min="10" max="1000" step="10" value="100">
+                        <span class="value" id="otocNVal">100</span>
+                    </div>
+                </div>
+                <div class="output-box">
+                    <div class="output-row">
+                        <span class="label">Lyapunov Exponent λ<sub>L</sub></span>
+                        <span class="val" id="lyapunovVal">2π T</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Scrambling Time t*</span>
+                        <span class="val" id="scramblingVal">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. BLACK HOLE CALCULATOR -->
+            <div class="sim-card">
+                <h3>Black Hole Parameter Calculator</h3>
+                <p class="description">
+                    Calculate black hole properties from its mass: Schwarzschild radius, Hawking temperature,
+                    Bekenstein-Hawking entropy, and evaporation time.
+                </p>
+                <div class="controls">
+                    <div class="control-group" style="flex: 2;">
+                        <label>Mass (in Solar Masses M<sub>☉</sub>)</label>
+                        <input type="range" id="bhMass" min="1" max="100" step="1" value="10" style="width: 100%;">
+                        <span class="value" id="bhMassVal">10 M<sub>☉</sub></span>
+                    </div>
+                </div>
+                <div class="output-box">
+                    <div class="output-row">
+                        <span class="label">Schwarzschild Radius r<sub>s</sub></span>
+                        <span class="val" id="rsVal">--</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Hawking Temperature T<sub>H</sub></span>
+                        <span class="val" id="thVal">--</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Bekenstein-Hawking Entropy S</span>
+                        <span class="val" id="sVal">--</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Evaporation Time t<sub>evap</sub></span>
+                        <span class="val" id="tevapVal">--</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Surface Gravity κ</span>
+                        <span class="val" id="kappaVal">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. PAGE CURVE -->
+            <div class="sim-card">
+                <h3>Page Curve Visualization</h3>
+                <p class="description">
+                    Evolution of Hawking radiation entropy. Initially rises (thermal), then falls after Page time
+                    (information exits) - demonstrating unitarity.
+                </p>
+                <div class="sim-canvas-container">
+                    <canvas id="pageCanvas"></canvas>
+                </div>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Initial BH Entropy S<sub>0</sub></label>
+                        <input type="range" id="pageS0" min="50" max="200" step="10" value="100">
+                        <span class="value" id="pageS0Val">100</span>
+                    </div>
+                </div>
+                <div class="output-box">
+                    <div class="output-row">
+                        <span class="label">Page Time t<sub>Page</sub></span>
+                        <span class="val" id="pageTimeVal">--</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Maximum S<sub>rad</sub></span>
+                        <span class="val" id="maxSradVal">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. KERR BLACK HOLE VISUALIZATION -->
+            <div class="sim-card">
+                <h3>Kerr Black Hole Structure</h3>
+                <p class="description">
+                    Visualization of horizons and ergosphere for a rotating black hole (Kerr).
+                    Spin parameter a determines the ergosphere shape.
+                </p>
+                <div class="sim-canvas-container" style="text-align: center;">
+                    <canvas id="kerrCanvas" width="400" height="300"></canvas>
+                </div>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Spin Parameter a/M</label>
+                        <input type="range" id="kerrSpin" min="0" max="0.99" step="0.01" value="0.5">
+                        <span class="value" id="kerrSpinVal">0.50</span>
+                    </div>
+                </div>
+                <div class="output-box">
+                    <div class="output-row">
+                        <span class="label">Outer Horizon r<sub>+</sub>/M</span>
+                        <span class="val" id="rplusVal">--</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Inner Horizon r<sub>-</sub>/M</span>
+                        <span class="val" id="rminusVal">--</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">ISCO r<sub>ISCO</sub>/M (prograde)</span>
+                        <span class="val" id="iscoVal">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. LYAPUNOV BOUND -->
+            <div class="sim-card">
+                <h3>λ MSS Chaos Bound</h3>
+                <p class="description">
+                    Comparison of Lyapunov exponents across various systems with the Maldacena-Shenker-Stanford bound.
+                    Black holes (and SYK model) saturate the bound.
+                </p>
+                <div class="formula-display">λ<sub>L</sub> ≤ 2πk<sub>B</sub>T/ℏ</div>
+                <div class="sim-canvas-container">
+                    <canvas id="boundCanvas"></canvas>
+                </div>
+                <div class="output-box">
+                    <div class="output-row">
+                        <span class="label">MSS Bound (at T=1)</span>
+                        <span class="val">λ<sub>max</sub> = 2π ≈ 6.28</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Black Hole</span>
+                        <span class="val" style="color: var(--danger);">Saturates bound ✓</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">SYK Model</span>
+                        <span class="val" style="color: var(--danger);">Saturates bound ✓</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. QNM SPECTRUM -->
+            <div class="sim-card">
+                <h3>∿ Quasinormal Mode Spectrum</h3>
+                <p class="description">
+                    Quasinormal mode frequencies for Schwarzschild black hole.
+                    Real part (oscillation) and imaginary part (decay rate).
+                </p>
+                <div class="formula-display">ω<sub>n</sub> = ω<sub>R</sub> - i(n + ½)|λ|</div>
+                <div class="sim-canvas-container">
+                    <canvas id="qnmCanvas"></canvas>
+                </div>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Angular Momentum l</label>
+                        <input type="range" id="qnmL" min="0" max="4" step="1" value="2">
+                        <span class="value" id="qnmLVal">l = 2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. PENROSE DIAGRAM -->
+            <div class="sim-card" style="grid-column: span 1;">
+                <h3>Penrose Diagram (Schwarzschild)</h3>
+                <p class="description">
+                    Conformal diagram for Schwarzschild black hole. Each point represents a 2-sphere.
+                    45° lines = null geodesics (light).
+                </p>
+                <div class="sim-canvas-container" style="background: transparent;">
+                    <svg class="penrose-svg" viewBox="0 0 300 350">
+                        <!-- Background -->
+                        <defs>
+                            <linearGradient id="singGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.8" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Region I: Exterior -->
+                        <polygon points="150,30 270,150 150,270 150,150" fill="rgba(0,212,255,0.1)"
+                            stroke="rgba(0,212,255,0.3)" stroke-width="1" />
+                        <text x="200" y="150" fill="#94a3b8" font-size="10" text-anchor="middle">Region I</text>
+                        <text x="200" y="165" fill="#64748b" font-size="8" text-anchor="middle">(Exterior)</text>
+
+                        <!-- Region II: Black Hole Interior -->
+                        <polygon points="150,150 150,270 30,150" fill="rgba(239,68,68,0.1)" stroke="rgba(239,68,68,0.3)"
+                            stroke-width="1" />
+                        <text x="100" y="185" fill="#94a3b8" font-size="10" text-anchor="middle">Region II</text>
+                        <text x="100" y="200" fill="#64748b" font-size="8" text-anchor="middle">(Interior)</text>
+
+                        <!-- Region III: White Hole -->
+                        <polygon points="150,30 150,150 30,150" fill="rgba(168,85,247,0.1)"
+                            stroke="rgba(168,85,247,0.3)" stroke-width="1" />
+                        <text x="100" y="100" fill="#94a3b8" font-size="10" text-anchor="middle">Region III</text>
+                        <text x="100" y="115" fill="#64748b" font-size="8" text-anchor="middle">(White Hole)</text>
+
+                        <!-- Singularities -->
+                        <line x1="30" y1="150" x2="150" y2="270" stroke="url(#singGrad)" stroke-width="3" />
+                        <text x="80" y="220" fill="#ef4444" font-size="9" transform="rotate(-45, 80, 220)">Singularity
+                            (r=0)</text>
+
+                        <line x1="30" y1="150" x2="150" y2="30" stroke="url(#singGrad)" stroke-width="3" />
+                        <text x="80" y="80" fill="#ef4444" font-size="9" transform="rotate(45, 80, 80)">Singularity
+                            (r=0)</text>
+
+                        <!-- Event Horizon -->
+                        <line x1="150" y1="30" x2="150" y2="270" stroke="#ff6b35" stroke-width="2"
+                            stroke-dasharray="5,3" />
+                        <text x="160" y="140" fill="#ff6b35" font-size="9">Event Horizon</text>
+                        <text x="160" y="152" fill="#ff6b35" font-size="9">(r = 2M)</text>
+
+                        <!-- Infinity labels -->
+                        <text x="150" y="20" fill="#00d4ff" font-size="10" text-anchor="middle">i⁺ (future
+                            timelike)</text>
+                        <text x="150" y="290" fill="#00d4ff" font-size="10" text-anchor="middle">i⁻ (past
+                            timelike)</text>
+                        <text x="280" y="155" fill="#00d4ff" font-size="10" text-anchor="start">i⁰ (spatial)</text>
+
+                        <!-- Null infinity labels -->
+                        <text x="220" y="90" fill="#22c55e" font-size="9" transform="rotate(-45,220,90)">ℐ⁺ (future
+                            null)</text>
+                        <text x="220" y="215" fill="#22c55e" font-size="9" transform="rotate(45,220,215)">ℐ⁻ (past
+                            null)</text>
+
+                        <!-- Sample light rays -->
+                        <line x1="200" y1="100" x2="250" y2="150" stroke="#22c55e" stroke-width="1" opacity="0.5" />
+                        <line x1="200" y1="200" x2="250" y2="150" stroke="#22c55e" stroke-width="1" opacity="0.5" />
+
+                        <!-- Infalling observer -->
+                        <path d="M 220 80 Q 180 150 120 200" stroke="#ffd93d" stroke-width="2" fill="none"
+                            stroke-dasharray="3,2" />
+                        <circle cx="220" cy="80" r="4" fill="#ffd93d" />
+                        <text x="230" y="75" fill="#ffd93d" font-size="8">Observer</text>
+                    </svg>
+                </div>
+                <div class="output-box">
+                    <div class="output-row">
+                        <span class="label">Regions</span>
+                        <span class="val">I (ext), II (BH), III (WH)</span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Null infinity</span>
+                        <span class="val">ℐ⁺, ℐ⁻</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. COMPLEXITY GROWTH -->
+            <div class="sim-card">
+                <h3>Complexity Growth</h3>
+                <p class="description">
+                    Computational complexity growth for black holes.
+                    Linear growth until exponential time, then saturation (Poincaré recurrence).
+                </p>
+                <div class="formula-display">dC/dt = 2M/πℏ (Lloyd's bound)</div>
+                <div class="sim-canvas-container">
+                    <canvas id="complexityCanvas"></canvas>
+                </div>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Black Hole Mass M</label>
+                        <input type="range" id="compMass" min="1" max="10" step="0.5" value="5">
+                        <span class="value" id="compMassVal">5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONSTANTS (in natural units where applicable)
+        // ============================================
+        const G = 6.674e-11;      // m³/kg/s²
+        const c = 2.998e8;        // m/s
+        const hbar = 1.055e-34;   // J·s
+        const kB = 1.381e-23;     // J/K
+        const Msun = 1.989e30;    // kg
+
+        // ============================================
+        // 1. OTOC SIMULATION
+        // ============================================
+        function initOTOC() {
+            const canvas = document.getElementById('otocCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function update() {
+                const T = parseFloat(document.getElementById('otocTemp').value);
+                const N = parseInt(document.getElementById('otocN').value);
+
+                document.getElementById('otocTempVal').textContent = T.toFixed(1);
+                document.getElementById('otocNVal').textContent = N;
+
+                // Lyapunov exponent (in units where 2π kB/ℏ = 1)
+                const lambda = 2 * Math.PI * T;
+                document.getElementById('lyapunovVal').textContent = `${lambda.toFixed(2)} (= 2πT)`;
+
+                // Scrambling time
+                const tStar = Math.log(N) / lambda;
+                document.getElementById('scramblingVal').textContent = `${tStar.toFixed(3)} (β/2π) ln N`;
+
+                // Generate chart data
+                const times = [];
+                const F = [];
+                const eps = 1 / N;
+
+                for (let t = 0; t <= 3 * tStar; t += tStar / 50) {
+                    times.push(t);
+                    // F(t) = 1 - (ε/N) * e^(λt) for t < t*
+                    // Then saturates around 0
+                    const growth = eps * Math.exp(lambda * t);
+                    const Ft = Math.max(0, 1 - Math.min(growth, 1));
+                    F.push(Ft);
+                }
+
+                // Draw chart
+                if (window.otocChart) window.otocChart.destroy();
+                window.otocChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: times.map(t => t.toFixed(2)),
+                        datasets: [{
+                            label: 'F(t)',
+                            data: F,
+                            borderColor: '#a855f7',
+                            backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                            annotation: {
+                                annotations: {
+                                    line1: {
+                                        type: 'line',
+                                        xMin: tStar,
+                                        xMax: tStar,
+                                        borderColor: '#ff6b35',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5]
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: { display: true, text: 't / (β/2π)', color: '#94a3b8' },
+                                ticks: { color: '#64748b', maxTicksLimit: 8 },
+                                grid: { color: 'rgba(255,255,255,0.05)' }
+                            },
+                            y: {
+                                title: { display: true, text: 'F(t)', color: '#94a3b8' },
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                min: 0, max: 1.1
+                            }
+                        }
+                    }
+                });
+            }
+
+            document.getElementById('otocTemp').addEventListener('input', update);
+            document.getElementById('otocN').addEventListener('input', update);
+            update();
+        }
+
+        // ============================================
+        // 2. BLACK HOLE CALCULATOR
+        // ============================================
+        function initBHCalculator() {
+            function update() {
+                const Msolar = parseFloat(document.getElementById('bhMass').value);
+                const M = Msolar * Msun;
+
+                document.getElementById('bhMassVal').innerHTML = `${Msolar} M<sub>☉</sub>`;
+
+                // Schwarzschild radius: rs = 2GM/c²
+                const rs = (2 * G * M) / (c * c);
+                document.getElementById('rsVal').textContent = `${(rs / 1000).toFixed(2)} km`;
+
+                // Hawking temperature: TH = ℏc³ / (8πGMkB)
+                const TH = (hbar * c * c * c) / (8 * Math.PI * G * M * kB);
+                let THstr;
+                if (TH < 1e-9) THstr = `${(TH * 1e12).toFixed(2)} pK`;
+                else if (TH < 1e-6) THstr = `${(TH * 1e9).toFixed(2)} nK`;
+                else THstr = `${TH.toExponential(2)} K`;
+                document.getElementById('thVal').textContent = THstr;
+
+                // Bekenstein-Hawking entropy: S = kB * A / (4 * lP²)
+                // A = 4π rs², lP² = ℏG/c³
+                const A = 4 * Math.PI * rs * rs;
+                const lP2 = (hbar * G) / (c * c * c);
+                const S = (kB * A) / (4 * lP2);
+                const Sdimensionless = A / (4 * lP2);
+                document.getElementById('sVal').textContent = `${Sdimensionless.toExponential(2)} kB`;
+
+                // Evaporation time: t ≈ 5120π G² M³ / (ℏ c⁴)
+                const tevap = (5120 * Math.PI * G * G * M * M * M) / (hbar * c * c * c * c);
+                const tevapYears = tevap / (365.25 * 24 * 3600);
+                document.getElementById('tevapVal').textContent = `${tevapYears.toExponential(2)} years`;
+
+                // Surface gravity: κ = c⁴/(4GM)
+                const kappa = (c * c * c * c) / (4 * G * M);
+                document.getElementById('kappaVal').textContent = `${kappa.toExponential(2)} m/s²`;
+            }
+
+            document.getElementById('bhMass').addEventListener('input', update);
+            update();
+        }
+
+        // ============================================
+        // 3. PAGE CURVE
+        // ============================================
+        function initPageCurve() {
+            const canvas = document.getElementById('pageCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function update() {
+                const S0 = parseInt(document.getElementById('pageS0').value);
+                document.getElementById('pageS0Val').textContent = S0;
+
+                const tPage = S0 / 2;
+                document.getElementById('pageTimeVal').textContent = `${tPage.toFixed(0)} (= S₀/2)`;
+                document.getElementById('maxSradVal').textContent = `${tPage.toFixed(0)} (= S₀/2)`;
+
+                const times = [];
+                const Srad = [];
+                const Sbh = [];
+                const Sthermal = [];
+
+                for (let t = 0; t <= S0; t += S0 / 100) {
+                    times.push(t);
+
+                    // Thermal entropy (would grow forever if no unitarity)
+                    const thermal = t;
+                    Sthermal.push(thermal);
+
+                    // Black hole entropy decreases
+                    const bh = S0 - t;
+                    Sbh.push(Math.max(0, bh));
+
+                    // True radiation entropy (Page curve)
+                    // Srad = min(t, S0 - t)
+                    const page = Math.min(t, S0 - t);
+                    Srad.push(Math.max(0, page));
+                }
+
+                if (window.pageChart) window.pageChart.destroy();
+                window.pageChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: times.map(t => t.toFixed(0)),
+                        datasets: [
+                            {
+                                label: 'S_rad (Page curve)',
+                                data: Srad,
+                                borderColor: '#22c55e',
+                                borderWidth: 3,
+                                fill: false,
+                                tension: 0
+                            },
+                            {
+                                label: 'S_BH',
+                                data: Sbh,
+                                borderColor: '#ef4444',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                fill: false
+                            },
+                            {
+                                label: 'S_thermal (no unitarity)',
+                                data: Sthermal,
+                                borderColor: '#64748b',
+                                borderWidth: 1,
+                                borderDash: [2, 2],
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { labels: { color: '#94a3b8' } } },
+                        scales: {
+                            x: {
+                                title: { display: true, text: 'Time', color: '#94a3b8' },
+                                ticks: { color: '#64748b', maxTicksLimit: 8 },
+                                grid: { color: 'rgba(255,255,255,0.05)' }
+                            },
+                            y: {
+                                title: { display: true, text: 'Entropy', color: '#94a3b8' },
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(255,255,255,0.05)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            document.getElementById('pageS0').addEventListener('input', update);
+            update();
+        }
+
+        // ============================================
+        // 4. KERR BLACK HOLE VISUALIZATION
+        // ============================================
+        function initKerr() {
+            const canvas = document.getElementById('kerrCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function update() {
+                const a = parseFloat(document.getElementById('kerrSpin').value);
+                document.getElementById('kerrSpinVal').textContent = a.toFixed(2);
+
+                // Horizons: r± = M ± sqrt(M² - a²), with M = 1
+                const rplus = 1 + Math.sqrt(1 - a * a);
+                const rminus = 1 - Math.sqrt(1 - a * a);
+
+                document.getElementById('rplusVal').textContent = rplus.toFixed(3);
+                document.getElementById('rminusVal').textContent = rminus.toFixed(3);
+
+                // ISCO (prograde)
+                const Z1 = 1 + Math.pow(1 - a * a, 1 / 3) * (Math.pow(1 + a, 1 / 3) + Math.pow(1 - a, 1 / 3));
+                const Z2 = Math.sqrt(3 * a * a + Z1 * Z1);
+                const risco = 3 + Z2 - Math.sqrt((3 - Z1) * (3 + Z1 + 2 * Z2));
+                document.getElementById('iscoVal').textContent = risco.toFixed(3);
+
+                // Clear and draw
+                const W = canvas.width;
+                const H = canvas.height;
+                const cx = W / 2;
+                const cy = H / 2;
+                const scale = 50;
+
+                ctx.clearRect(0, 0, W, H);
+
+                // Draw ergosphere (θ-dependent)
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(168, 85, 247, 0.6)';
+                ctx.fillStyle = 'rgba(168, 85, 247, 0.1)';
+                ctx.lineWidth = 2;
+                for (let th = 0; th <= 2 * Math.PI; th += 0.05) {
+                    const costh = Math.cos(th);
+                    const rergo = 1 + Math.sqrt(1 - a * a * costh * costh);
+                    const x = cx + rergo * scale * Math.sin(th);
+                    const y = cy - rergo * scale * Math.cos(th);
+                    if (th === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Outer horizon (circle)
+                ctx.beginPath();
+                ctx.arc(cx, cy, rplus * scale, 0, 2 * Math.PI);
+                ctx.strokeStyle = '#ff6b35';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Inner horizon
+                if (rminus > 0.01) {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, rminus * scale, 0, 2 * Math.PI);
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([3, 3]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+
+                // Singularity (ring for Kerr)
+                ctx.beginPath();
+                ctx.arc(cx, cy, a * scale * 0.3, 0, 2 * Math.PI);
+                ctx.fillStyle = '#000';
+                ctx.fill();
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Labels
+                ctx.font = '10px Inter';
+                ctx.fillStyle = '#ff6b35';
+                ctx.fillText('r₊ (outer horizon)', cx + rplus * scale + 5, cy);
+                ctx.fillStyle = '#a855f7';
+                ctx.fillText('Ergosphere', cx + 1.5 * scale, cy - 1.5 * scale);
+                if (rminus > 0.1) {
+                    ctx.fillStyle = '#ef4444';
+                    ctx.fillText('r₋', cx + rminus * scale + 3, cy + 15);
+                }
+            }
+
+            document.getElementById('kerrSpin').addEventListener('input', update);
+            update();
+        }
+
+        // ============================================
+        // 5. CHAOS BOUND COMPARISON
+        // ============================================
+        function initBound() {
+            const canvas = document.getElementById('boundCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const systems = ['Black Hole', 'SYK Model', 'Spin Chain', 'Kicked Rotor', 'Integrable'];
+            const lambdas = [6.28, 6.28, 3.5, 2.1, 0]; // λ/T in units of 2π
+            const bound = 6.28; // 2π
+
+            if (window.boundChart) window.boundChart.destroy();
+            window.boundChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: systems,
+                    datasets: [{
+                        label: 'λL / T',
+                        data: lambdas,
+                        backgroundColor: lambdas.map(l => l >= bound - 0.1 ? 'rgba(239, 68, 68, 0.7)' : 'rgba(0, 212, 255, 0.7)'),
+                        borderColor: lambdas.map(l => l >= bound - 0.1 ? '#ef4444' : '#00d4ff'),
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    yMin: bound,
+                                    yMax: bound,
+                                    borderColor: '#ffd93d',
+                                    borderWidth: 3,
+                                    borderDash: [10, 5],
+                                    label: {
+                                        display: true,
+                                        content: 'MSS Bound = 2π',
+                                        position: 'end'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
+                        y: {
+                            title: { display: true, text: 'λL / T', color: '#94a3b8' },
+                            ticks: { color: '#64748b' },
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            max: 8
+                        }
+                    }
+                }
+            });
+
+            // Draw MSS bound line manually
+            setTimeout(() => {
+                const yAxis = window.boundChart.scales.y;
+                const xAxis = window.boundChart.scales.x;
+                ctx.save();
+                ctx.beginPath();
+                ctx.strokeStyle = '#ffd93d';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([10, 5]);
+                const yPos = yAxis.getPixelForValue(bound);
+                ctx.moveTo(xAxis.left, yPos);
+                ctx.lineTo(xAxis.right, yPos);
+                ctx.stroke();
+                ctx.fillStyle = '#ffd93d';
+                ctx.font = '11px Inter';
+                ctx.fillText('MSS Bound (2π)', xAxis.right - 80, yPos - 5);
+                ctx.restore();
+            }, 100);
+        }
+
+        // ============================================
+        // 6. QNM SPECTRUM
+        // ============================================
+        function initQNM() {
+            const canvas = document.getElementById('qnmCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function update() {
+                const l = parseInt(document.getElementById('qnmL').value);
+                document.getElementById('qnmLVal').textContent = `l = ${l}`;
+
+                // QNM frequencies for Schwarzschild (approximate)
+                // ωR ≈ (l + 1/2) / (3√3 M), ωI ≈ (n + 1/2) / (3√3 M)
+                const omegaR_base = (l + 0.5) / (3 * Math.sqrt(3));
+                const omegaI_step = 1 / (3 * Math.sqrt(3));
+
+                const modes = [];
+                for (let n = 0; n <= 8; n++) {
+                    modes.push({
+                        n: n,
+                        real: omegaR_base,
+                        imag: -(n + 0.5) * omegaI_step
+                    });
+                }
+
+                if (window.qnmChart) window.qnmChart.destroy();
+                window.qnmChart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: `QNM (l=${l})`,
+                            data: modes.map(m => ({ x: m.real, y: m.imag })),
+                            backgroundColor: '#00d4ff',
+                            borderColor: '#00d4ff',
+                            pointRadius: 8,
+                            pointHoverRadius: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: {
+                                title: { display: true, text: 'Re(ω) M', color: '#94a3b8' },
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(255,255,255,0.05)' }
+                            },
+                            y: {
+                                title: { display: true, text: 'Im(ω) M', color: '#94a3b8' },
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(255,255,255,0.05)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            document.getElementById('qnmL').addEventListener('input', update);
+            update();
+        }
+
+        // ============================================
+        // 7. COMPLEXITY GROWTH
+        // ============================================
+        function initComplexity() {
+            const canvas = document.getElementById('complexityCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function update() {
+                const M = parseFloat(document.getElementById('compMass').value);
+                document.getElementById('compMassVal').textContent = M.toFixed(1);
+
+                const rate = 2 * M / Math.PI; // dC/dt = 2M/πℏ
+                const S = M * M * 10; // S ~ M² (simplified)
+                const tMax = Math.exp(S / 10); // Exponential time before Poincaré
+
+                const times = [];
+                const complexity = [];
+
+                // Linear growth phase then saturation
+                const tSat = 100; // Simplified saturation time for visualization
+                for (let t = 0; t <= tSat * 1.5; t += tSat / 50) {
+                    times.push(t);
+                    if (t < tSat) {
+                        complexity.push(rate * t);
+                    } else {
+                        // Saturation with small fluctuations
+                        const sat = rate * tSat;
+                        complexity.push(sat + 0.05 * sat * Math.sin(t * 0.5));
+                    }
+                }
+
+                if (window.compChart) window.compChart.destroy();
+                window.compChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: times.map(t => t.toFixed(0)),
+                        datasets: [{
+                            label: 'Complexity C(t)',
+                            data: complexity,
+                            borderColor: '#00d4ff',
+                            backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                            fill: true,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: {
+                                title: { display: true, text: 'Time', color: '#94a3b8' },
+                                ticks: { color: '#64748b', maxTicksLimit: 8 },
+                                grid: { color: 'rgba(255,255,255,0.05)' }
+                            },
+                            y: {
+                                title: { display: true, text: 'Complexity C', color: '#94a3b8' },
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(255,255,255,0.05)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            document.getElementById('compMass').addEventListener('input', update);
+            update();
+        }
+
+        // ============================================
+        // INITIALIZE ALL
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Stars background
+            const stars = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                const size = Math.random() * 2 + 0.5;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 3}s`);
+                stars.appendChild(star);
+            }
+
+            // Initialize simulations
+            initOTOC();
+            initBHCalculator();
+            initPageCurve();
+            initKerr();
+            initBound();
+            initQNM();
+            initComplexity();
+        });
+    </script>
+</body>
+
+</html>
