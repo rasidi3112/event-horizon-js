@@ -1374,8 +1374,74 @@ a:hover {
         grid-template-columns: 1fr;
     }
 
-    .footer-content {
+    .footer-grid {
+        /* Fixed selector form .footer-content */
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 2.5rem;
+    }
+
+    .footer-brand {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .footer-logo {
+        justify-content: center;
+    }
+
+    .footer-links {
+        text-align: center;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+}
+
+/* === Mobile Optimization (HP) === */
+@media (max-width: 480px) {
+    .hero {
+        padding: calc(64px + 3rem) 0 4rem;
+        /* Kurangi padding atas/bawah */
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+        /* Judul lebih pas di HP */
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .control-group {
+        width: 100%;
+        /* Tombol/Input full width agar mudah ditekan */
+    }
+
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-brand {
+        font-size: 0.9rem;
+        /* Kecilkan brand di navbar agar muat */
+    }
+
+    .brand-tag {
+        display: none;
+        /* Sembunyikan 'Research Preview' di HP sempit */
     }
 }
