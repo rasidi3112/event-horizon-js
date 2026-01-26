@@ -27,7 +27,7 @@
 
 Black Hole Explorer is a web-based research interface designed to bridge the gap between theoretical physics and interactive data visualization. This platform integrates real-time astrophysical data from NASA's archives with client-side simulations of relativistic phenomena. The project focuses on visualizing Schwarzschild and Kerr metric geodesics, Hawking radiation thermodynamics, and the diagnosis of quantum chaos through Out-of-Time-Order Correlators (OTOC) and Lyapunov exponents.
 
-By leveraging modern web technologies (Vanilla JavaScript, CSS3), this repository demonstrates how complex mathematical models—typically reserved for Python or MATLAB environments—can be effectively rendered and explored in a browser environment with high performance.
+By leveraging modern web technologies (Vanilla JavaScript, CSS3), this repository demonstrates how complex mathematical models typically reserved for Python or MATLAB environments can be effectively rendered and explored in a browser environment with high performance.
 
 ## Core Architecture
 
