@@ -1,4 +1,3 @@
-
 // === Physical Constants (SI Units) ===
 const CONSTANTS = {
     G: 6.67430e-11,          // Gravitational constant (m³/kg/s²)
