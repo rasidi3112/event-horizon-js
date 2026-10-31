@@ -195,7 +195,7 @@
             <h2 class="subsection-title" style="text-align:left;">II. Penrose Process & Energy Extraction</h2>
 
             <div class="math-block">
-                <div class="math-title">Penrose Process Efficiency</div>
+                <div class="math-title">Maximum extractable rotational energy</div>
                 <p style="color: var(--text-secondary); margin-bottom: 1rem;">
                     Energy can be extracted from the ergosphere. Particles with negative energy (relative to infinity)
                     fall in, while particles with higher energy than the initial particle escape.
@@ -204,10 +204,14 @@
                 E_{\text{out}} = E_{\text{in}} + |E_{\text{negative}}|
                 \]
                 <div class="derivation-step">
-                    Maximum efficiency:
+                    Rotational energy that can be extracted in principle (down to the irreducible mass):
                     \[
-                    \eta_{\max} = \frac{E_{\text{extracted}}}{M_{\text{initial}}} = 1 - \frac{1}{\sqrt{2}} \approx 29\%
+                    \frac{E_{\text{extracted}}}{M} = 1 - \frac{M_{\rm irr}}{M} \le 1 - \frac{1}{\sqrt{2}} \approx 29\%
                     \]
+                </div>
+                <div class="math-note">
+                    This is not the efficiency of a single Penrose event: one decay near the horizon of an extremal
+                    Kerr black hole returns at most \((\sqrt{2}-1)/2 \approx 20.7\%\) extra energy (Chandrasekhar).
                 </div>
             </div>
 
@@ -217,10 +221,9 @@
                 M_{\text{irr}}^2 = \frac{1}{2}\left(M^2 + \sqrt{M^4 - J^2}\right) = \frac{A}{16\pi}
                 \]
                 <div class="derivation-step">
-                    Christodoulou's mass formula:
+                    Christodoulou–Ruffini mass formula (\(G = c = 1\)):
                     \[
-                    M^2 = M_{\text{irr}}^2 + \frac{J^2}{4M_{\text{irr}}^2} + \frac{Q^4}{4M_{\text{irr}}^2} +
-                    \frac{Q^2}{2}
+                    M^2 = \left(M_{\rm irr} + \frac{Q^2}{4M_{\rm irr}}\right)^2 + \frac{J^2}{4M_{\rm irr}^2}
                     \]
                 </div>
             </div>
@@ -253,14 +256,24 @@
             </div>
 
             <div class="math-block">
-                <div class="math-title">QNM Frequencies (WKB Approximation)</div>
+                <div class="math-title">QNM Frequencies (Eikonal / WKB Approximation)</div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Convention: perturbations \(\propto e^{-i\omega t}\), so decaying modes have
+                    \(\mathrm{Im}\,\omega < 0\).
+                </p>
                 \[
-                \omega_n = \Omega_c \ell - i\left(n + \frac{1}{2}\right)|\lambda_L|
+                \omega = \Omega_c\left(\ell + \tfrac12\right) - i\left(n + \tfrac12\right)|\lambda_{\rm geo}|
                 \]
+                <div class="math-note">
+                    \(\Omega_c\) is the angular velocity and \(\lambda_{\rm geo}\) the Lyapunov exponent of the
+                    unstable circular photon orbit (Cardoso et al. 2009). \(\lambda_{\rm geo}\) is a classical
+                    geodesic quantity and must not be confused with the quantum Lyapunov exponent \(\lambda_L\) of
+                    the OTOC. For Schwarzschild, \(M\Omega_c = M|\lambda_{\rm geo}| = 1/\sqrt{27}\).
+                </div>
                 <div class="derivation-step">
-                    For highly damped modes (large n):
+                    For highly damped modes (large n, \(\hbar = k_B = 1\)):
                     \[
-                    \omega_n \approx \frac{\ln 3}{8\pi M} + i\frac{2\pi T_H}{\hbar}\left(n + \frac{1}{2}\right)
+                    \omega_n \approx T_H \ln 3 - 2\pi i\, T_H \left(n + \tfrac12\right), \qquad T_H = \frac{1}{8\pi M}
                     \]
                 </div>
                 <div class="math-note">
@@ -279,10 +292,9 @@
                 F(t) = \langle W^\dagger(t) V^\dagger(0) W(t) V(0) \rangle_\beta
                 \]
                 <div class="derivation-step">
-                    Regularized version (finite temperature):
+                    Regularized version (finite temperature, MSS 2016):
                     \[
-                    F(t) = \text{Tr}\left[\sqrt{\rho} W^\dagger(t) \sqrt{\rho} V^\dagger \sqrt{\rho} W(t) \sqrt{\rho}
-                    V\right]
+                    F(t) = \mathrm{Tr}\left[y\,W(t)\,y\,V\,y\,W(t)\,y\,V\right],\quad y^4 = \rho
                     \]
                     where \(\rho = e^{-\beta H}/Z\)
                 </div>
@@ -359,17 +371,24 @@
     <div class="math-block">
         <div class="math-title">Four-Point Function & Chaos</div>
         \[
-        \frac{\mathcal{F}(t)}{\mathcal{F}(0)} = 1 - \frac{6}{\beta J} e^{\frac{2\pi}{\beta}t} + \ldots
+        \frac{\mathrm{OTOC}(t)}{G(\tfrac{\beta}{2})^2} \simeq 1 - \frac{3\alpha_0}{2\pi\alpha_K}\,
+        \frac{\beta J}{N}\, e^{2\pi t/\beta} + \ldots
         \]
         <div class="math-note">
-            Lyapunov exponent: \(\lambda_L = \frac{2\pi}{\beta} = 2\pi T\) - saturates the chaos bound!
+            The growing (Schwarzian) piece scales as \(\frac{\beta J}{N} e^{2\pi t/\beta}\); \(\alpha_0\) and
+            \(\alpha_K\) are \(q\)-dependent \(\mathcal{O}(1)\) constants (Maldacena–Stanford 2016, eq. 3.162).
+            Lyapunov exponent: \(\lambda_L = \frac{2\pi}{\beta} = 2\pi T\) - saturates the chaos bound as
+            \(\beta J \to \infty\). The correction becomes order one at
+            \[
+            t_* \simeq \frac{\beta}{2\pi}\ln\frac{N}{\beta J}
+            \]
         </div>
     </div>
 
     <div class="math-block">
         <div class="math-title">Schwarzian Action (Low Energy)</div>
         \[
-        S[\tau(u)] = -C \int_0^\beta du \, \{f(u), u\}
+        S[f] = -C \int_0^\beta du \, \{f(u), u\}
         \]
         <div class="derivation-step">
             Schwarzian derivative:
@@ -390,8 +409,11 @@
         <div class="math-block">
             <div class="math-title">Butterfly Velocity</div>
             \[
-            v_B^2 = \frac{d}{2(d-1)} \cdot (2\pi T)^2 r_h^2
+            v_B = \sqrt{\frac{d}{2(d-1)}}
             \]
+            <div class="math-note">
+                In units of \(c\), for Einstein gravity dual to a planar AdS\(_{d+1}\) black brane.
+            </div>
             <div class="derivation-step">
                 Spatial spreading: \(C(t, \vec{x}) \sim e^{\lambda_L(t - |\vec{x}|/v_B)}\)
             </div>
@@ -403,7 +425,7 @@
             t_* = \frac{\beta}{2\pi} \ln S = \frac{\hbar}{2\pi k_B T} \ln S
             \]
             <div class="derivation-step">
-                For black holes: \(S = \frac{A}{4G\hbar}\), sehingga:
+                For black holes: \(S = \frac{A}{4G\hbar}\), so that:
                 \[
                 t_* \sim r_s \ln\left(\frac{r_s^2}{l_P^2}\right) \sim M \ln M
                 \]
@@ -426,7 +448,9 @@
                 \end{cases}
                 \]
                 <div class="derivation-step">
-                    Page time: \(t_{\text{Page}} \sim \frac{t_{\text{evap}}}{2}\)
+                    Page time: \(t_{\text{Page}} \approx 0.54\, t_{\text{evap}}\) (Page 2013, including the
+                    entropy produced by the emission; the naive estimate without it gives
+                    \((1 - 2^{-3/2})\,t_{\text{evap}} \approx 0.65\, t_{\text{evap}}\))
                     <br>
                     At Page time, \(S_{\text{rad}} = S_{\text{BH}}\)
                 </div>
@@ -518,10 +542,14 @@
             \frac{d\mathcal{C}}{dt} \leq \frac{2M}{\pi\hbar}
             \]
             <div class="derivation-step">
-                For eternal AdS black hole at late times:
+                For eternal AdS black hole at late times (CA):
                 \[
-                \frac{d\mathcal{C}}{dt} = \frac{2M}{\pi\hbar} \quad \text{(saturated!)}
+                \frac{d\mathcal{C}_A}{dt} \to \frac{2M}{\pi\hbar}
                 \]
+            </div>
+            <div class="math-note">
+                In complexity = action the late-time rate approaches \(2M/\pi\hbar\) from above, so the
+                bound is violated at intermediate times (Carmi et al. 2017).
             </div>
             <div class="math-note">
                 Black holes are not only the fastest scramblers but also the fastest computers!
