@@ -627,10 +627,17 @@ function initNavigation() {
     const navMenu = document.getElementById('navMenu');
 
     if (navbar) {
+        // Throttle scroll work to one update per animation frame
+        let scrollTicking = false;
         window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-            updateActiveNav();
-        });
+            if (scrollTicking) return;
+            scrollTicking = true;
+            requestAnimationFrame(() => {
+                navbar.classList.toggle('scrolled', window.scrollY > 50);
+                updateActiveNav();
+                scrollTicking = false;
+            });
+        }, { passive: true });
     }
 
     if (navToggle && navMenu) {
@@ -640,10 +647,27 @@ function initNavigation() {
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        if (anchor.id === 'modalDownload') return;
+
         anchor.addEventListener('click', (e) => {
+            // Read href at click time; only in-page fragments are handled here
+            const href = anchor.getAttribute('href') || '';
+            if (!href.startsWith('#')) return;
+
             e.preventDefault();
             if (navMenu) navMenu.classList.remove('active');
-            const target = document.querySelector(anchor.getAttribute('href'));
+
+            if (href.length === 1) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            let target = null;
+            try {
+                target = document.querySelector(href);
+            } catch {
+                return; // Not a valid selector
+            }
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
