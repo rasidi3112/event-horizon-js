@@ -75,17 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
 ╠═══════════════════════════════════════════════════════════════════════╣
 ║                                                                       ║
 ║  PHYSICS ENGINE LOADED:                                               ║
-║  • Full Kerr metric calculations                                      ║
+║  • Kerr horizons, ergosphere, ISCO, surface gravity                   ║
 ║  • Hawking radiation & thermodynamics                                 ║
 ║  • Quantum chaos (OTOC, Lyapunov, scrambling)                        ║
 ║  • SYK model correlation functions                                    ║
-║  • Quasinormal mode spectrum                                          ║
+║  • Quasinormal mode spectrum (eikonal)                                ║
 ║  • Gravitational wave templates                                       ║
-║  • Page curve evolution                                               ║
-║  • Complexity growth dynamics                                         ║
+║  • Page curve evolution (naive model)                                 ║
 ║                                                                       ║
 ║  KNOWN BLACK HOLES: ${KNOWN_BLACK_HOLES.length} objects loaded                                    ║
-║  DATA SOURCE: NASA APIs, EHT, LIGO/Virgo                             ║
+║  DATA SOURCE: NASA APIs, EHT, GRAVITY, LIGO/Virgo                    ║
 ║                                                                       ║
 ║  KEY FORMULAS:                                                        ║
 ║  • r_s = 2GM/c²              (Schwarzschild radius)                  ║
