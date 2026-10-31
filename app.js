@@ -102,16 +102,34 @@ function initBlackHoleDatabase() {
     const container = document.getElementById('bhDatabase');
     if (!container) return;
 
-    container.innerHTML = KNOWN_BLACK_HOLES.map((bh, index) => `
-        <div class="bh-entry" data-index="${index}" onclick="selectBlackHole(KNOWN_BLACK_HOLES[${index}])">
-            <div class="bh-name">${bh.name}</div>
-            <div class="bh-meta">
-                <span class="bh-mass">${formatMass(bh.mass)} M☉</span>
-                <span class="bh-type">${bh.type}</span>
-            </div>
-            <div class="bh-source">Source: ${bh.source}</div>
-        </div>
-    `).join('');
+    container.replaceChildren(...KNOWN_BLACK_HOLES.map((bh, index) => {
+        const entry = document.createElement('div');
+        entry.className = 'bh-entry';
+        entry.dataset.index = String(index);
+        entry.addEventListener('click', () => selectBlackHole(bh));
+
+        const name = document.createElement('div');
+        name.className = 'bh-name';
+        name.textContent = bh.name;
+
+        const meta = document.createElement('div');
+        meta.className = 'bh-meta';
+        const mass = document.createElement('span');
+        mass.className = 'bh-mass';
+        mass.textContent = `${formatMass(bh.mass)} M☉`;
+        const type = document.createElement('span');
+        type.className = 'bh-type';
+        type.textContent = bh.type;
+        meta.append(mass, type);
+
+        const source = document.createElement('div');
+        source.className = 'bh-source';
+        source.textContent = `Source: ${bh.source}`;
+        if (bh.ref) source.title = bh.ref;
+
+        entry.append(name, meta, source);
+        return entry;
+    }));
 }
 
 function selectBlackHole(bh) {
@@ -135,10 +153,11 @@ function updatePhysicsDisplay() {
     if (!physics) return;
 
     const display = physics.toDisplayObject();
+    const bh = AppState.selectedBlackHole;
 
     // Update various display elements if they exist
     const elements = {
-        'displayMass': `${AppState.selectedBlackHole.name}: ${formatMass(AppState.selectedBlackHole.mass)} M☉`,
+        'displayMass': `${bh.name}: ${formatMass(bh.mass)} M☉`,
         'displayRadius': formatDistance(display.radii.schwarzschild),
         'displayTemperature': formatTemperature(display.thermodynamics.temperature),
         'displayEntropy': formatScientific(display.thermodynamics.entropy) + ' k_B',
@@ -146,7 +165,7 @@ function updatePhysicsDisplay() {
         'displayLyapunov': formatScientific(display.quantumChaos.lyapunovBound) + ' s⁻¹',
         'displayScrambling': formatTime(display.quantumChaos.scramblingTime),
         'displayISCO': formatDistance(display.radii.isco),
-        'displaySpin': (display.spin * 100).toFixed(1) + '% of maximum'
+        'displaySpin': `a* = ${display.spin.toFixed(3)}` + (bh.spinAssumed ? ' (assumed)' : '')
     };
 
     for (const [id, value] of Object.entries(elements)) {

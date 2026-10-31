@@ -21,19 +21,70 @@ const CONSTANTS = (() => {
 })();
 
 // === Known Black Holes Database (from observations) ===
+// mass in M☉, distance in light years. spinAssumed = true means the spin is not measured
+// and the value is only a placeholder for the Kerr calculations.
 const KNOWN_BLACK_HOLES = [
-    { name: "Sagittarius A*", mass: 4.154e6, distance: 26673, type: "Supermassive", spin: 0.9, source: "EHT 2022" },
-    { name: "M87*", mass: 6.5e9, distance: 53.49e6, type: "Supermassive", spin: 0.9, source: "EHT 2019" },
-    { name: "Cygnus X-1", mass: 21.2, distance: 6070, type: "Stellar", spin: 0.998, source: "LIGO" },
-    { name: "GW150914 Primary", mass: 35.6, distance: 1.4e9, type: "Stellar", spin: 0.31, source: "LIGO 2015" },
-    { name: "GW150914 Secondary", mass: 30.6, distance: 1.4e9, type: "Stellar", spin: 0.46, source: "LIGO 2015" },
-    { name: "GW150914 Remnant", mass: 63.1, distance: 1.4e9, type: "Stellar", spin: 0.69, source: "LIGO 2015" },
-    { name: "TON 618", mass: 6.6e10, distance: 1.04e10, type: "Ultramassive", spin: 0.7, source: "Optical" },
-    { name: "NGC 1277", mass: 1.7e10, distance: 2.2e8, type: "Supermassive", spin: 0.85, source: "Hubble" },
-    { name: "Holmberg 15A*", mass: 4e10, distance: 7e8, type: "Ultramassive", spin: 0.6, source: "VLT" },
-    { name: "Phoenix A*", mass: 1e11, distance: 5.8e9, type: "Ultramassive", spin: 0.5, source: "Radio" },
-    { name: "GRS 1915+105", mass: 12.4, distance: 28000, type: "Stellar", spin: 0.98, source: "X-ray" },
-    { name: "LB-1 Primary", mass: 68, distance: 15000, type: "Stellar", spin: 0.7, source: "Spectroscopy" },
+    {
+        name: "Sagittarius A*", mass: 4.154e6, distance: 26673, type: "Supermassive",
+        spin: 0.9, spinAssumed: true, source: "GRAVITY 2019",
+        // M = 4.154 ± 0.014 ×10⁶ M☉, R0 = 8178 pc (= 26,673 ly), Table 1 (down-sampled fit)
+        ref: "GRAVITY Collab. 2019, A&A 625, L10 (arXiv:1904.05721)"
+    },
+    {
+        name: "M87*", mass: 6.5e9, distance: 5.48e7, type: "Supermassive",
+        spin: 0.9, spinAssumed: true, source: "EHT 2019",
+        // D = 16.8 Mpc ≈ 54.8 Mly
+        ref: "EHT Collab. 2019, ApJL 875, L6"
+    },
+    {
+        name: "Cygnus X-1", mass: 21.2, distance: 7240, type: "Stellar",
+        spin: 0.998, spinAssumed: false, source: "Miller-Jones et al. 2021 (VLBA)",
+        // M = 21.2 ± 2.2 M☉, d = 2.22 kpc (≈ 7,240 ly), a* > 0.9985 (engine caps at 0.998)
+        ref: "Miller-Jones et al. 2021, Science 371, 1046 (arXiv:2102.09091)"
+    },
+    {
+        name: "GW150914 Primary", mass: 35.6, distance: 1.4e9, type: "Stellar",
+        spin: 0.31, spinAssumed: true, source: "GWTC-1",
+        ref: "LIGO/Virgo 2019, PRX 9, 031040 (arXiv:1811.12907)"
+    },
+    {
+        name: "GW150914 Secondary", mass: 30.6, distance: 1.4e9, type: "Stellar",
+        spin: 0.46, spinAssumed: true, source: "GWTC-1",
+        ref: "LIGO/Virgo 2019, PRX 9, 031040 (arXiv:1811.12907)"
+    },
+    {
+        name: "GW150914 Remnant", mass: 63.1, distance: 1.4e9, type: "Stellar",
+        spin: 0.69, spinAssumed: false, source: "GWTC-1",
+        ref: "LIGO/Virgo 2019, PRX 9, 031040 (arXiv:1811.12907)"
+    },
+    {
+        name: "TON 618", mass: 6.6e10, distance: 1.04e10, type: "Ultramassive",
+        spin: 0.7, spinAssumed: true, source: "Optical (Hβ virial)",
+        ref: "Shemmer et al. 2004, ApJ 614, 547"
+    },
+    {
+        name: "NGC 1277", mass: 1.2e9, distance: 2.36e8, type: "Supermassive",
+        spin: 0.85, spinAssumed: true, source: "Keck OSIRIS (upper limit)",
+        // M_bh = 1.2 ×10⁹ M☉ (probable upper limit), angular-size distance 72.5 Mpc ≈ 236 Mly
+        ref: "Graham et al. 2016 (arXiv:1601.05151)"
+    },
+    {
+        name: "Holmberg 15A*", mass: 4e10, distance: 7e8, type: "Ultramassive",
+        spin: 0.6, spinAssumed: true, source: "VLT MUSE",
+        ref: "Mehrgan et al. 2019 (arXiv:1907.10608)"
+    },
+    {
+        name: "Phoenix A*", mass: 1e11, distance: 5.8e9, type: "Ultramassive",
+        spin: 0.5, spinAssumed: true, source: "Indirect estimate",
+        note: "indirect estimate",
+        ref: "Brockamp et al. 2016 (arXiv:1509.04782)"
+    },
+    {
+        name: "GRS 1915+105", mass: 12.4, distance: 28000, type: "Stellar",
+        spin: 0.98, spinAssumed: false, source: "VLBA parallax + X-ray",
+        // M = 12.4 M☉, d = 8.6 kpc (Reid 2014); a* > 0.98 (McClintock 2006), 0.98 ± 0.01 (Reid 2014)
+        ref: "Reid et al. 2014 (arXiv:1409.2453); McClintock et al. 2006 (arXiv:astro-ph/0606076)"
+    },
 ];
 
 // === Quantum Chaos Black Hole Physics Engine ===
