@@ -3,3 +3,4 @@
 .idea
 *.log
 config.js
+node_modules/
