@@ -48,7 +48,7 @@
             <div class="nav-actions">
                 <div class="api-indicator" id="apiIndicator">
                     <span class="indicator-dot"></span>
-                    <span class="indicator-text">NASA API Connected</span>
+                    <span class="indicator-text">Connecting…</span>
                 </div>
                 <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
             </div>
@@ -694,6 +694,8 @@
                 <div class="loader-spinner"></div>
                 <p>Loading NASA images...</p>
             </div>
+            <p class="gallery-message" id="galleryMessage" hidden
+                style="text-align: center; color: var(--text-muted);"></p>
             <div class="gallery-grid" id="galleryGrid"></div>
         </div>
     </section>
@@ -757,7 +759,7 @@
                     <p id="modalDesc"></p>
                     <div class="modal-meta">
                         <span id="modalDate"></span>
-                        <a href="#" id="modalDownload" target="_blank" class="download-btn">Download HD</a>
+                        <a href="#" id="modalDownload" target="_blank" rel="noopener noreferrer" class="download-btn">Download HD</a>
                     </div>
                 </div>
             </div>
@@ -786,10 +788,10 @@
                 </div>
                 <div class="footer-links">
                     <h4>Resources</h4>
-                    <a href="https://arxiv.org/list/hep-th/recent" target="_blank">arXiv hep-th</a>
-                    <a href="https://arxiv.org/list/gr-qc/recent" target="_blank">arXiv gr-qc</a>
-                    <a href="https://api.nasa.gov" target="_blank">NASA APIs</a>
-                    <a href="https://eventhorizontelescope.org" target="_blank">EHT</a>
+                    <a href="https://arxiv.org/list/hep-th/recent" target="_blank" rel="noopener noreferrer">arXiv hep-th</a>
+                    <a href="https://arxiv.org/list/gr-qc/recent" target="_blank" rel="noopener noreferrer">arXiv gr-qc</a>
+                    <a href="https://api.nasa.gov" target="_blank" rel="noopener noreferrer">NASA APIs</a>
+                    <a href="https://eventhorizontelescope.org" target="_blank" rel="noopener noreferrer">EHT</a>
                 </div>
             </div>
             <div class="footer-bottom">

@@ -13,8 +13,6 @@ const CONSTANTS = {
 };
 
 // === NASA API Configuration ===
-const NASA_API_KEY = 'DEMO_KEY'; // TODO: Replace with your own key from https://api.nasa.gov for higher rate limits
-const NASA_API = 'https://api.nasa.gov';
 const NASA_IMAGES = 'https://images-api.nasa.gov';
 
 // === Known Black Holes Database (from observations) ===
@@ -335,37 +333,25 @@ class GravitationalWaveSimulator {
 class NASADataFetcher {
     constructor() {
         this.cache = new Map();
-        this.apiKey = NASA_API_KEY;
     }
 
+    // Throws on network failure or non-2xx responses; callers report the error.
     async searchBlackHoleImages(query = "black hole", limit = 24) {
         const cacheKey = `images_${query}_${limit}`;
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
 
-        try {
-            const response = await fetch(
-                `${NASA_IMAGES}/search?q=${encodeURIComponent(query)}&media_type=image&page_size=${limit}`
-            );
-            const data = await response.json();
-            const results = data.collection.items.filter(item => item.links && item.links[0]);
-            this.cache.set(cacheKey, results);
-            return results;
-        } catch (error) {
-            console.error("NASA API Error:", error);
-            return [];
+        const response = await fetch(
+            `${NASA_IMAGES}/search?q=${encodeURIComponent(query)}&media_type=image&page_size=${limit}`
+        );
+        if (!response.ok) {
+            throw new Error(`NASA API responded with HTTP ${response.status}`);
         }
-    }
-
-    async getAPOD() {
-        try {
-            const response = await fetch(`${NASA_API}/planetary/apod?api_key=${this.apiKey}`);
-            return await response.json();
-        } catch (error) {
-            console.error("APOD Error:", error);
-            return null;
-        }
+        const data = await response.json();
+        const results = data.collection.items.filter(item => item.links && item.links[0]);
+        this.cache.set(cacheKey, results);
+        return results;
     }
 
     // Get specific black hole related images
@@ -541,8 +527,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initEventListeners();
     initBlackHoleDatabase();
+    updateAPIStatus('connecting');
     searchGallery('black hole');
-    updateAPIStatus(true);
 
     // Initialize with Sagittarius A*
     selectBlackHole(KNOWN_BLACK_HOLES[0]);
@@ -725,61 +711,103 @@ function initEventListeners() {
 }
 
 // === API Status ===
-function updateAPIStatus(connected) {
+// state: 'connecting' | 'connected' | 'error'
+function updateAPIStatus(state) {
     const indicator = document.getElementById('apiIndicator');
     if (!indicator) return;
 
     const dot = indicator.querySelector('.indicator-dot');
     const text = indicator.querySelector('.indicator-text');
+    const labels = {
+        connecting: 'Connecting…',
+        connected: 'NASA API Connected',
+        error: 'API Error'
+    };
 
     if (dot) {
         dot.classList.remove('connected', 'error');
-        dot.classList.add(connected ? 'connected' : 'error');
+        if (state === 'connected') dot.classList.add('connected');
+        if (state === 'error') dot.classList.add('error');
     }
     if (text) {
-        text.textContent = connected ? 'NASA API Connected' : 'API Error';
+        text.textContent = labels[state] || labels.connecting;
     }
 }
 
 // === NASA Image Gallery ===
+function safeHttpsUrl(url) {
+    try {
+        const parsed = new URL(url);
+        return parsed.protocol === 'https:' ? parsed.href : null;
+    } catch {
+        return null;
+    }
+}
+
+function setGalleryMessage(text) {
+    const message = document.getElementById('galleryMessage');
+    if (!message) return;
+    message.textContent = text;
+    message.hidden = !text;
+}
+
+function createGalleryItem(item) {
+    const info = item.data?.[0] || {};
+    const imageUrl = safeHttpsUrl(item.links?.[0]?.href);
+    if (!imageUrl) return null;
+
+    const title = info.title || 'NASA image';
+    const description = (info.description || '').substring(0, 500);
+    const date = info.date_created?.split('T')[0] || '';
+
+    const card = document.createElement('div');
+    card.className = 'gallery-item';
+    card.addEventListener('click', () => openModal(imageUrl, title, description, date));
+
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = title;
+    img.loading = 'lazy';
+
+    const meta = document.createElement('div');
+    meta.className = 'gallery-item-info';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'gallery-item-title';
+    titleEl.textContent = title;
+    const dateEl = document.createElement('div');
+    dateEl.className = 'gallery-item-date';
+    dateEl.textContent = date || 'NASA';
+    meta.append(titleEl, dateEl);
+
+    card.append(img, meta);
+    return card;
+}
+
 async function searchGallery(query) {
     const loader = document.getElementById('galleryLoader');
     const grid = document.getElementById('galleryGrid');
     if (!loader || !grid) return;
 
     loader.style.display = 'block';
-    grid.innerHTML = '';
+    setGalleryMessage('');
+    grid.replaceChildren();
 
     try {
         const results = await AppState.nasaFetcher.searchBlackHoleImages(query, 24);
+        const cards = results.map(createGalleryItem).filter(Boolean);
 
-        if (results.length === 0) {
-            grid.innerHTML = '<p style="text-align:center; color: var(--text-muted); grid-column: 1/-1;">No images found.</p>';
-            loader.style.display = 'none';
-            return;
+        if (cards.length === 0) {
+            setGalleryMessage('No images found.');
+        } else {
+            grid.replaceChildren(...cards);
         }
-
-        grid.innerHTML = results.map(item => {
-            const info = item.data[0];
-            const imageUrl = item.links[0].href;
-
-            return `
-                <div class="gallery-item" onclick="openModal('${imageUrl}', '${escapeQuotes(info.title)}', '${escapeQuotes((info.description || '').substring(0, 500))}', '${info.date_created?.split('T')[0] || ''}')">
-                    <img src="${imageUrl}" alt="${escapeQuotes(info.title)}" loading="lazy">
-                    <div class="gallery-item-info">
-                        <div class="gallery-item-title">${info.title}</div>
-                        <div class="gallery-item-date">${info.date_created?.split('T')[0] || 'NASA'}</div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        loader.style.display = 'none';
-        updateAPIStatus(true);
+        updateAPIStatus('connected');
     } catch (error) {
         console.error('Gallery Error:', error);
-        if (loader) loader.innerHTML = '<p>Failed to load gallery. Check your connection.</p>';
-        updateAPIStatus(false);
+        setGalleryMessage('Failed to load gallery. Check your connection.');
+        updateAPIStatus('error');
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -788,17 +816,23 @@ function openModal(imageUrl, title, description, date) {
     const modal = document.getElementById('imageModal');
     if (!modal) return;
 
+    const safeUrl = safeHttpsUrl(imageUrl);
+    if (!safeUrl) return;
+
     const img = document.getElementById('modalImage');
     const titleEl = document.getElementById('modalTitle');
     const descEl = document.getElementById('modalDesc');
     const dateEl = document.getElementById('modalDate');
     const downloadEl = document.getElementById('modalDownload');
 
-    if (img) img.src = imageUrl;
+    if (img) {
+        img.src = safeUrl;
+        img.alt = title;
+    }
     if (titleEl) titleEl.textContent = title;
     if (descEl) descEl.textContent = description;
     if (dateEl) dateEl.textContent = date ? formatDate(date) : '';
-    if (downloadEl) downloadEl.href = imageUrl;
+    if (downloadEl) downloadEl.href = safeUrl;
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -871,15 +905,6 @@ function formatScientific(num) {
 function superscript(n) {
     const chars = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻' };
     return String(n).split('').map(c => chars[c] || c).join('');
-}
-
-function escapeQuotes(text) {
-    if (!text) return '';
-    return text
-        .replace(/'/g, "\\'")
-        .replace(/"/g, '\\"')
-        .replace(/\n/g, ' ')
-        .replace(/\r/g, '');
 }
 
 // === Export for simulations page ===
