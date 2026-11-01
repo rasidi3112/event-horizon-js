@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initEventListeners();
     initBlackHoleDatabase();
+    initHero3D();
     updateAPIStatus('connecting');
     searchGallery('black hole');
 
@@ -96,6 +97,34 @@ document.addEventListener('DOMContentLoaded', () => {
 ╚═══════════════════════════════════════════════════════════════════════╝
     `);
 });
+
+// === Hero 3D Black Hole ===
+// Falls back silently to the static hero image when WebGL is unavailable.
+function initHero3D() {
+    const hero = document.getElementById('home');
+    const canvas = document.getElementById('hero3d');
+    if (!hero || !canvas || !window.BlackHole3D || !BlackHole3D.isSupported()) return;
+
+    try {
+        const renderer = new BlackHole3D(canvas, {
+            distance: 34,
+            elevation: 7,
+            azimuth: -0.6,
+            autoRotate: 0.03,
+            exposure: 0.95,
+            diskIntensity: 0.85,
+            // Wide screens: hole on the right, matching the original hero composition
+            offset: (w, h) => (w / h > 1.15 ? [0.31 * w / h, 0.02] : [0, -0.22]),
+            onFirstFrame: () => {
+                canvas.classList.add('is-ready');
+                hero.classList.add('has-3d');
+            }
+        });
+        renderer.start();
+    } catch {
+        canvas.remove();
+    }
+}
 
 // === Black Hole Database UI ===
 function initBlackHoleDatabase() {

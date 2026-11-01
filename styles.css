@@ -1445,3 +1445,53 @@ a:hover {
         /* Sembunyikan 'Research Preview' di HP sempit */
     }
 }
+
+/* === Motion & 3D ===
+   Additive layer: without WebGL or with reduced motion the page renders exactly as before. */
+
+/* Hero: real-time ray-traced black hole behind the content */
+.hero {
+    overflow: hidden;
+}
+
+.hero-3d {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+    cursor: grab;
+    touch-action: pan-y;
+}
+
+.hero-3d:active {
+    cursor: grabbing;
+}
+
+.hero-3d.is-ready {
+    opacity: 1;
+}
+
+.hero.has-3d::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 42%, rgba(0, 0, 0, 0) 72%);
+}
+
+@media (max-width: 768px) {
+    .hero.has-3d::before {
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.55));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-3d {
+        transition: none;
+    }
+}
