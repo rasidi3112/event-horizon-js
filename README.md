@@ -8,6 +8,13 @@
   </p>
 
   <p>
+    <a href="https://rasidi3112.github.io/event-horizon-js/"><strong>Live site: rasidi3112.github.io/event-horizon-js</strong></a>
+  </p>
+
+  <p>
+    <a href="https://rasidi3112.github.io/event-horizon-js/">
+      <img src="https://img.shields.io/badge/Live-GitHub_Pages-000000?style=flat-square" alt="Live site">
+    </a>
     <a href="https://api.nasa.gov/">
       <img src="https://img.shields.io/badge/Data-NASA_API-000000?style=flat-square" alt="NASA API">
     </a>
@@ -38,7 +45,15 @@ The simulation module implements numerical methods to visualize the butterfly ef
 *   **MSS Bound Visualization:** Demonstrates the saturation of the Lyapunov exponent bound $\lambda_L \le \frac{2\pi k_B T}{\hbar}$.
 *   **OTOC Growth:** Simulator for $C(t) = -\langle [W(t), V(0)]^2 \rangle \sim e^{\lambda_L t}$.
 
-### 3. Data Integration Layer
+### 3. Real-Time 3D Black Hole
+A dependency-free WebGL renderer (`blackhole3d.js`) ray-traces every pixel through a Schwarzschild spacetime in real time.
+*   **Photon geodesics:** $\frac{d^2\vec x}{d\lambda^2} = -\frac{3}{2}\,h^2\,\frac{\vec x}{r^5}$ with $h = |\vec x \times \dot{\vec x}|$ (units $r_s = 1$), integrated with velocity Verlet. The shadow, the photon ring and the lensed far side of the disk emerge from the integration rather than being painted on.
+*   **Accretion disk:** thin disk from the ISCO ($3\,r_s$) outward with a Novikov–Thorne-like temperature profile, Keplerian flow, relativistic Doppler beaming and gravitational redshift $g = D\sqrt{1 - r_s/r}$.
+*   **Performance:** a single full-screen triangle, adaptive render resolution to hold ~60 fps, pauses when off-screen, respects `prefers-reduced-motion`, and falls back to the static hero image when WebGL is unavailable.
+
+It powers the animated hero on the landing page and an interactive card (elevation, distance, disk size, brightness, drag to orbit) on the Simulations page. Section content also fades in on scroll (`animations.js`).
+
+### 4. Data Integration Layer
 A robust fetch wrapper interfaces directly with the **NASA Image and Video Library API**, filtering for high-relevance astrophysical imagery (accretion disks, event horizons, active galactic nuclei) and presenting them in a curated, museum-grade gallery interface.
 
 ## Technical Stack
@@ -66,7 +81,7 @@ This project is client-side only and requires no build pipeline or package manag
     ```
 
 3.  **Launch**
-    Open `index.html` in any modern web browser (Chrome, Firefox, Safari, Edge).
+    Visit the live site at <{URL}> or open `index.html` in any modern web browser (Chrome, Firefox, Safari, Edge).
     
     *Note: For API functionality to work without strict CORS policies on some local environments, consider running a simple python server:*
     ```bash
@@ -93,11 +108,14 @@ node --test tests/*.test.cjs
 ├── styles.css            # Global design system & responsive layout
 ├── physics.js            # Pure physics engine, black hole catalog & formatters (no DOM)
 ├── app.js                # UI logic & NASA API integration
+├── blackhole3d.js        # Real-time WebGL ray-traced black hole
+├── animations.js         # Scroll reveal animations
 ├── hero-background.png   # Hero image
 ├── promo-dashboard.png   # Promotional screenshots
 ├── promo-image.png
 ├── tests/
 │   └── physics.test.cjs  # Physics regression tests (node --test)
+├── .nojekyll             # Serve the site as-is on GitHub Pages
 └── LICENSE               # MIT License
 ```
 
@@ -109,6 +127,7 @@ node --test tests/*.test.cjs
 *   **Spins** flagged as *assumed* in the catalog (Sgr A*, M87*, TON 618, NGC 1277, Holmberg 15A*, Phoenix A*, GW150914 components) are placeholders, not measurements. The engine caps spin at the Thorne limit $a_* = 0.998$.
 *   **OTOC** curves use $F(t) = \max(0, 1 - e^{\lambda_L t}/S)$, i.e. the early-time exponential growth with $\epsilon = 1/S$; the saturation regime is not modelled.
 *   **Chaos-bound** and **complexity** charts are schematic/illustrative.
+*   **3D renderer:** non-rotating (Schwarzschild) hole, geometrically thin disk, approximate blackbody colour ramp and a $g^3$ brightness law; the disk texture is procedural noise, not a magnetohydrodynamic simulation.
 
 ## References
 
