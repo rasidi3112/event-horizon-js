@@ -19,6 +19,8 @@
         integrity="sha384-3N9GHhCtN3CQef6tNfqgZlv7sQLYIkcChN+uaTZ7xVdzKYp/SjBNPxa92+hM7EAY"
         crossorigin="anonymous"></script>
     <script src="physics.js"></script>
+    <script src="blackhole3d.js"></script>
+    <script src="animations.js"></script>
     <link rel="stylesheet" href="styles.css">
     <style>
         .sim-container {
@@ -168,6 +170,47 @@
             margin-bottom: 1rem;
         }
 
+        .sim-card-wide {
+            grid-column: 1 / -1;
+        }
+
+        .bh3d-stage {
+            position: relative;
+            background: #000;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            aspect-ratio: 16 / 7;
+            min-height: 260px;
+            margin-bottom: 1rem;
+        }
+
+        .bh3d-stage canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+            touch-action: pan-y;
+        }
+
+        .bh3d-stage canvas:active {
+            cursor: grabbing;
+        }
+
+        .bh3d-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .bh3d-fallback[hidden] {
+            display: none;
+        }
+
         .penrose-svg {
             width: 100%;
             max-width: 350px;
@@ -197,6 +240,58 @@
         </p>
 
         <div class="sim-grid">
+            <!-- 0. 3D RAY-TRACED BLACK HOLE -->
+            <div class="sim-card sim-card-wide">
+                <h3>3D Ray-Traced Black Hole</h3>
+                <p class="description">
+                    Real-time GPU ray tracing of light around a Schwarzschild black hole. Every pixel's photon
+                    path is integrated through curved spacetime, so the far side of the accretion disk appears
+                    lensed above and below the shadow, and the approaching side is Doppler-boosted. Drag to orbit.
+                </p>
+                <div class="formula-display">d²x/dλ² = −(3/2) h² x / r⁵, h = |x × dx/dλ| (units r<sub>s</sub> = 1)</div>
+                <div class="bh3d-stage">
+                    <canvas id="bh3dCanvas" role="img"
+                        aria-label="Ray-traced Schwarzschild black hole with a lensed accretion disk"></canvas>
+                    <p class="bh3d-fallback" id="bh3dFallback" hidden>WebGL is not available in this browser.</p>
+                </div>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Observer elevation above disk (°)</label>
+                        <input type="range" id="bh3dElevation" min="-60" max="60" step="1" value="8">
+                        <span class="value" id="bh3dElevationVal">8°</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Observer distance r/r<sub>s</sub></label>
+                        <input type="range" id="bh3dDistance" min="10" max="40" step="1" value="22">
+                        <span class="value" id="bh3dDistanceVal">22</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Disk outer radius r/r<sub>s</sub></label>
+                        <input type="range" id="bh3dDisk" min="6" max="20" step="0.5" value="14">
+                        <span class="value" id="bh3dDiskVal">14.0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Disk brightness</label>
+                        <input type="range" id="bh3dBrightness" min="0.4" max="2" step="0.1" value="1">
+                        <span class="value" id="bh3dBrightnessVal">1.0</span>
+                    </div>
+                </div>
+                <button class="btn-sim" id="bh3dPause" type="button">Pause</button>
+                <div class="output-box">
+                    <div class="output-row">
+                        <span class="label">Shadow radius b<sub>c</sub> = (√27/2) r<sub>s</sub></span>
+                        <span class="val">2.598 r<sub>s</sub></span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Photon sphere</span>
+                        <span class="val">1.5 r<sub>s</sub></span>
+                    </div>
+                    <div class="output-row">
+                        <span class="label">Disk inner edge (ISCO)</span>
+                        <span class="val">3 r<sub>s</sub></span>
+                    </div>
+                </div>
+            </div>
             <!-- 1. OTOC DECAY -->
             <div class="sim-card">
                 <h3>OTOC Decay & Scrambling</h3>
@@ -489,6 +584,57 @@
 
     <script>
         // Physical constants and the black hole engine come from physics.js (CONSTANTS, BlackHolePhysics).
+
+        // ============================================
+        // 0. 3D RAY-TRACED BLACK HOLE (blackhole3d.js)
+        // ============================================
+        function initBlackHole3D() {
+            const canvas = document.getElementById('bh3dCanvas');
+            const fallback = document.getElementById('bh3dFallback');
+            const elevation = document.getElementById('bh3dElevation');
+            const showFallback = () => {
+                canvas.hidden = true;
+                fallback.hidden = false;
+            };
+            if (!window.BlackHole3D || !BlackHole3D.isSupported()) return showFallback();
+
+            let renderer;
+            try {
+                renderer = new BlackHole3D(canvas, {
+                    distance: 22,
+                    elevation: 8,
+                    autoRotate: 0.05,
+                    exposure: 1.0,
+                    onCameraChange: deg => {
+                        elevation.value = Math.round(deg);
+                        document.getElementById('bh3dElevationVal').textContent = `${Math.round(deg)}°`;
+                    }
+                });
+            } catch {
+                return showFallback();
+            }
+            renderer.start();
+
+            const bind = (id, format, apply) => {
+                const input = document.getElementById(id);
+                const label = document.getElementById(`${id}Val`);
+                input.addEventListener('input', () => {
+                    const v = parseFloat(input.value);
+                    label.textContent = format(v);
+                    apply(v);
+                });
+            };
+            bind('bh3dElevation', v => `${v}°`, v => renderer.setOptions({ elevation: v }));
+            bind('bh3dDistance', v => `${v}`, v => renderer.setOptions({ distance: v }));
+            bind('bh3dDisk', v => v.toFixed(1), v => renderer.setOptions({ diskOuter: v }));
+            bind('bh3dBrightness', v => v.toFixed(1), v => renderer.setOptions({ diskIntensity: v }));
+
+            const pauseBtn = document.getElementById('bh3dPause');
+            pauseBtn.addEventListener('click', () => {
+                renderer.setPaused(!renderer.paused);
+                pauseBtn.textContent = renderer.paused ? 'Play' : 'Pause';
+            });
+        }
 
         // ============================================
         // 1. OTOC SIMULATION (units ħ = k_B = 1)
@@ -1024,6 +1170,7 @@
             }
 
             // Initialize simulations
+            initBlackHole3D();
             initOTOC();
             initBHCalculator();
             initPageCurve();
